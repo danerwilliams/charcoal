@@ -1,6 +1,4 @@
-import { API_ROUTES } from '@withgraphite/graphite-cli-routes';
 import chalk from 'chalk';
-import { requestWithArgs } from '../../lib/api/request';
 import { TContext } from '../../lib/context';
 import { TScopeSpec } from '../../lib/engine/scope_spec';
 import { ExitFailedError, KilledError } from '../../lib/errors';
@@ -144,8 +142,6 @@ export async function submitAction(
     );
   }
 
-  await displayRepoMessage(context);
-
   if (!context.interactive) {
     return;
   }
@@ -153,39 +149,6 @@ export async function submitAction(
   const survey = await getSurvey(context);
   if (survey) {
     await showSurvey(survey, context);
-  }
-}
-
-export async function displayRepoMessage(context: TContext): Promise<void> {
-  try {
-    cliAuthPrecondition(context);
-    const response = await requestWithArgs(
-      context.userConfig,
-      API_ROUTES.getRepoMessage,
-      {},
-      {
-        org: context.repoConfig.getRepoOwner(),
-        repo: context.repoConfig.getRepoName(),
-      }
-    );
-
-    if (response._response.status !== 200 || !response.message) {
-      return;
-    }
-
-    switch (response.message.status) {
-      case 'info':
-        context.splog.info(response.message.text);
-        break;
-      case 'warning':
-        context.splog.warn(response.message.text);
-        break;
-      case 'error':
-        context.splog.error(response.message.text);
-        break;
-    }
-  } catch (e) {
-    // silence any error - this shouldn't crash any part of the CLI
   }
 }
 
