@@ -4,7 +4,6 @@ import { TScopeSpec } from '../../lib/engine/scope_spec';
 import { ExitFailedError, KilledError } from '../../lib/errors';
 import { CommandFailedError } from '../../lib/git/runner';
 import { cliAuthPrecondition } from '../../lib/preconditions';
-import { getSurvey, showSurvey } from '../survey';
 import { getPRInfoForBranches } from './prepare_branches';
 import { submitPullRequest } from './submit_prs';
 import { validateBranchesToSubmit } from './validate_branches';
@@ -144,11 +143,6 @@ export async function submitAction(
 
   if (!context.interactive) {
     return;
-  }
-
-  const survey = await getSurvey(context);
-  if (survey) {
-    await showSurvey(survey, context);
   }
 }
 
