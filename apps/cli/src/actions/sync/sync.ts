@@ -4,7 +4,6 @@ import { SCOPE } from '../../lib/engine/scope_spec';
 import { KilledError } from '../../lib/errors';
 import { uncommittedTrackedChangesPrecondition } from '../../lib/preconditions';
 import { restackBranches } from '../restack';
-import { syncPrInfo } from '../sync_pr_info';
 import { cleanBranches } from './clean_branches';
 
 export async function syncAction(
@@ -25,8 +24,6 @@ export async function syncAction(
   }
 
   const branchesToRestack: string[] = [];
-
-  await syncPrInfo(context.engine.allBranchNames, context);
 
   if (opts.delete) {
     context.splog.info(

@@ -1,27 +1,14 @@
 import chalk from 'chalk';
 import { TContext } from '../../lib/context';
 import { ExitFailedError, KilledError } from '../../lib/errors';
-import { syncPrInfo } from '../sync_pr_info';
 
 export async function validateBranchesToSubmit(
   branchNames: string[],
   context: TContext
 ): Promise<string[]> {
-  const syncPrInfoPromise = syncPrInfo(branchNames, context);
+  validateBaseRevisions(branchNames, context);
+  await validateNoEmptyBranches(branchNames, context);
 
-  try {
-    validateBaseRevisions(branchNames, context);
-    await validateNoEmptyBranches(branchNames, context);
-  } catch (err) {
-    try {
-      await syncPrInfoPromise;
-    } catch {
-      // pass
-    }
-    throw err;
-  }
-
-  await syncPrInfoPromise;
   await validateNoMergedOrClosedBranches(branchNames, context);
   return branchNames;
 }
