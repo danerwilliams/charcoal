@@ -1,12 +1,4 @@
-import { getPrInfoForBranches, TPRInfoToUpsert } from '../lib/api/pr_info';
 import { TContext } from '../lib/context';
-import {
-  getMetadataRefList,
-  readMetadataRef,
-} from '../lib/engine/metadata_ref';
-import { prInfoConfigFactory } from '../lib/spiffy/pr_info_spf';
-import { repoConfigFactory, TRepoConfig } from '../lib/spiffy/repo_config_spf';
-import { TUserConfig, userConfigFactory } from '../lib/spiffy/user_config_spf';
 import { spawnDetached } from '../lib/utils/spawn';
 
 export function refreshPRInfoInBackground(context: TContext): void {
@@ -26,54 +18,4 @@ export function refreshPRInfoInBackground(context: TContext): void {
 
     spawnDetached(__filename);
   }
-}
-
-export async function getPrInfoToUpsert({
-  userConfig,
-  repoConfig,
-}: {
-  userConfig: TUserConfig;
-  repoConfig: TRepoConfig;
-}): Promise<TPRInfoToUpsert> {
-  const { authToken, repoName, repoOwner } = {
-    authToken: userConfig.getAuthToken(),
-    repoName: repoConfig.getRepoName(),
-    repoOwner: repoConfig.getRepoOwner(),
-  };
-  if (!authToken || !repoName || !repoOwner) {
-    return [];
-  }
-  const branchNamesWithExistingPrNumbers = Object.keys(
-    getMetadataRefList()
-  ).map((branchName) => ({
-    branchName,
-    prNumber: readMetadataRef(branchName)?.prInfo?.number,
-  }));
-  return await getPrInfoForBranches(
-    branchNamesWithExistingPrNumbers,
-    {
-      authToken,
-      repoName,
-      repoOwner,
-    },
-    userConfig
-  );
-}
-
-async function refreshPRInfo(): Promise<void> {
-  try {
-    const prInfoToUpsert = await getPrInfoToUpsert({
-      userConfig: userConfigFactory.load(),
-      repoConfig: repoConfigFactory.load(),
-    });
-    prInfoConfigFactory
-      .load()
-      .update((data) => (data.prInfoToUpsert = prInfoToUpsert));
-  } catch (err) {
-    prInfoConfigFactory.load().delete();
-  }
-}
-
-if (process.argv[1] === __filename) {
-  void refreshPRInfo();
 }
