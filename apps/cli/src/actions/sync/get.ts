@@ -1,58 +1,17 @@
 import chalk from 'chalk';
-import { getDownstackDependencies } from '../../lib/api/get_downstack_dependencies';
 import { TContext } from '../../lib/context';
 import { KilledError, RebaseConflictError } from '../../lib/errors';
-import {
-  cliAuthPrecondition,
-  uncommittedTrackedChangesPrecondition,
-} from '../../lib/preconditions';
 import { assertUnreachable } from '../../lib/utils/assert_unreachable';
 import { persistContinuation } from '../persist_continuation';
 import { printConflictStatus } from '../print_conflict_status';
-import { syncPrInfo } from '../sync_pr_info';
 
 export async function getAction(
-  args: { branchName: string | undefined; force: boolean },
+  _args: { branchName: string | undefined; force: boolean },
   context: TContext
 ): Promise<void> {
-  uncommittedTrackedChangesPrecondition();
-  context.splog.info(
-    `Pulling ${chalk.cyan(context.engine.trunk)} from remote...`
+  context.splog.message(
+    '⚠️ This command is not not yet implemented in Graphite CLI Open Source :-( \n\nPlease check out the issue on GitHub https://github.com/danerwilliams/graphite-cli/issues/6'
   );
-
-  context.splog.info(
-    context.engine.pullTrunk() === 'PULL_UNNEEDED'
-      ? `${chalk.green(context.engine.trunk)} is up to date.`
-      : `${chalk.green(context.engine.trunk)} fast-forwarded to ${chalk.gray(
-          context.engine.getRevision(context.engine.trunk)
-        )}.`
-  );
-  context.splog.newline();
-
-  const authToken = cliAuthPrecondition(context);
-  const downstackToSync = await getDownstackDependencies(
-    {
-      branchName: args.branchName ?? context.engine.currentBranchPrecondition,
-      trunkName: context.engine.trunk,
-    },
-    {
-      authToken,
-      repoName: context.repoConfig.getRepoName(),
-      repoOwner: context.repoConfig.getRepoOwner(),
-    },
-    context
-  );
-
-  await getBranchesFromRemote(
-    {
-      downstack: downstackToSync,
-      base: context.engine.trunk,
-      force: args.force,
-    },
-    context
-  );
-
-  await syncPrInfo(context.engine.allBranchNames, context);
 }
 
 export async function getBranchesFromRemote(
