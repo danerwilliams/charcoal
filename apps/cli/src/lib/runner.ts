@@ -6,8 +6,6 @@ import chalk from 'chalk';
 import { version } from '../../package.json';
 import { init } from '../actions/init';
 import { refreshPRInfoInBackground } from '../background_tasks/fetch_pr_info';
-import { postTelemetryInBackground } from '../background_tasks/post_traces';
-import { fetchUpgradePromptInBackground } from '../background_tasks/upgrade_prompt';
 import {
   initContext,
   initContextLite,
@@ -68,7 +66,6 @@ async function graphiteInternal(
     handlerMaybeWithCacheLock.cacheLock?.release();
     // End all current traces abruptly.
     tracer.allSpans.forEach((s) => s.end(undefined, new KilledError()));
-    postTelemetryInBackground();
     // eslint-disable-next-line no-restricted-syntax
     process.exit(1);
   });
@@ -91,7 +88,6 @@ async function graphiteInternal(
         },
       },
       async () => {
-        fetchUpgradePromptInBackground(contextLite);
         if (!handlerMaybeWithCacheLock.repo) {
           await handlerMaybeWithCacheLock.run(contextLite);
           return;
@@ -114,7 +110,6 @@ async function graphiteInternal(
     }
     process.exitCode = 1;
   }
-  postTelemetryInBackground();
 }
 
 // eslint-disable-next-line max-params

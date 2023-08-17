@@ -10,7 +10,6 @@ const schema = t.shape({
   branchReplacement: t.optional(
     t.unionMany([t.literal('_'), t.literal('-'), t.literal('')])
   ),
-  authToken: t.optional(t.string),
   tips: t.optional(t.boolean),
   editor: t.optional(t.string),
   pager: t.optional(t.string),
@@ -30,7 +29,6 @@ const schema = t.shape({
       t.shape({
         name: t.string,
         hostPrefix: t.string,
-        authToken: t.optional(t.string),
       })
     )
   ),
@@ -83,7 +81,6 @@ export const userConfigFactory = spiffy({
         return {
           name: 'default',
           hostPrefix: '',
-          authToken: data.authToken,
         };
       }
     };
@@ -104,10 +101,6 @@ export const userConfigFactory = spiffy({
       return hostPrefix
         ? `https://app.${hostPrefix}.graphite.dev`
         : DEFAULT_GRAPHITE_APP_SERVER;
-    };
-
-    const getAuthToken = (): string | undefined => {
-      return getDefaultProfile().authToken;
     };
 
     const getEditor = () => {
@@ -141,7 +134,6 @@ export const userConfigFactory = spiffy({
       getEditor,
       getApiServerUrl,
       getAppServerUrl,
-      getAuthToken,
       getPager,
       execEditor: (editFilePath: string) => {
         const command = `${getEditor()} ${editFilePath}`;
