@@ -1,4 +1,3 @@
-import { upsertPrInfoForBranches } from '../actions/sync_pr_info';
 import { composeEngine, TEngine } from './engine/engine';
 import { TGit } from './git/git';
 import { rebaseInProgress } from './git/rebase_in_progress';
@@ -101,7 +100,6 @@ export function initContext(
   });
   const prInfoConfig = prInfoConfigFactory.loadIfExists();
   if (prInfoConfig) {
-    upsertPrInfoForBranches(prInfoConfig.data.prInfoToUpsert ?? [], engine);
     prInfoConfig.delete();
   }
   return {
