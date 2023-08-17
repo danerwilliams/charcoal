@@ -62,6 +62,27 @@ export async function getPRInfoForBranches(
     const parentBranchName = context.engine.getParentPrecondition(
       action.branchName
     );
+
+    const isGithubAuthPresent = false;
+
+    const prCreationInfo = isGithubAuthPresent
+      ? await getPRCreationInfo(
+          {
+            branchName: action.branchName,
+            editPRFieldsInline: args.editPRFieldsInline,
+            draft: args.draft,
+            publish: args.publish,
+            reviewers: args.reviewers,
+          },
+          context
+        )
+      : {
+          title: '',
+          body: '',
+          reviewers: [],
+          draft: false,
+        };
+
     submissionInfo.push({
       head: action.branchName,
       headSha: context.engine.getRevision(action.branchName),
@@ -84,16 +105,7 @@ export async function getPRInfoForBranches(
           }
         : {
             action: 'create' as const,
-            ...(await getPRCreationInfo(
-              {
-                branchName: action.branchName,
-                editPRFieldsInline: args.editPRFieldsInline,
-                draft: args.draft,
-                publish: args.publish,
-                reviewers: args.reviewers,
-              },
-              context
-            )),
+            ...prCreationInfo,
           }),
     });
   }
