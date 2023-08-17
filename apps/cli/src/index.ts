@@ -4,7 +4,6 @@
 import chalk from 'chalk';
 import tmp from 'tmp';
 import yargs from 'yargs';
-import { postTelemetryInBackground } from './background_tasks/post_traces';
 import { globalArgumentsOptions } from './lib/global_arguments';
 import { getYargsInput } from './lib/pre-yargs/preprocess_command';
 
@@ -18,7 +17,6 @@ if (!process.env.DEBUG) {
 tmp.setGracefulCleanup();
 
 process.on('uncaughtException', (err) => {
-  postTelemetryInBackground();
   console.log(chalk.redBright(`UNCAUGHT EXCEPTION: ${err.message}`));
   console.log(chalk.redBright(`UNCAUGHT EXCEPTION: ${err.stack}`));
   // eslint-disable-next-line no-restricted-syntax
