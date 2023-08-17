@@ -3,9 +3,7 @@ import { TContext } from '../../lib/context';
 import { TScopeSpec } from '../../lib/engine/scope_spec';
 import { ExitFailedError, KilledError } from '../../lib/errors';
 import { CommandFailedError } from '../../lib/git/runner';
-import { cliAuthPrecondition } from '../../lib/preconditions';
 import { getPRInfoForBranches } from './prepare_branches';
-import { submitPullRequest } from './submit_prs';
 import { validateBranchesToSubmit } from './validate_branches';
 
 // eslint-disable-next-line max-lines-per-function
@@ -34,7 +32,6 @@ export async function submitAction(
     );
   }
   const populateRemoteShasPromise = context.engine.populateRemoteShas();
-  const cliAuthToken = cliAuthPrecondition(context);
   if (args.dryRun) {
     context.splog.info(
       chalk.yellow(
@@ -129,16 +126,6 @@ export async function submitAction(
       }
       throw err;
     }
-
-    await submitPullRequest(
-      {
-        submissionInfo: [submissionInfo],
-        mergeWhenReady: args.mergeWhenReady,
-        trunkBranchName: context.engine.trunk,
-        cliAuthToken,
-      },
-      context
-    );
   }
 
   if (!context.interactive) {

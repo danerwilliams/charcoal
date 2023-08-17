@@ -6,7 +6,6 @@ import chalk from 'chalk';
 import { version } from '../../package.json';
 import { init } from '../actions/init';
 import { refreshPRInfoInBackground } from '../background_tasks/fetch_pr_info';
-import { postSurveyResponsesInBackground } from '../background_tasks/post_survey';
 import { postTelemetryInBackground } from '../background_tasks/post_traces';
 import { fetchUpgradePromptInBackground } from '../background_tasks/upgrade_prompt';
 import {
@@ -93,7 +92,6 @@ async function graphiteInternal(
       },
       async () => {
         fetchUpgradePromptInBackground(contextLite);
-        postSurveyResponsesInBackground(contextLite);
         if (!handlerMaybeWithCacheLock.repo) {
           await handlerMaybeWithCacheLock.run(contextLite);
           return;

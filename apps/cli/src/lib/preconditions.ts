@@ -42,16 +42,6 @@ export function ensureSomeStagedChangesPrecondition(context: TContext): void {
   throw new PreconditionsFailedError(`Cannot run without staged changes.`);
 }
 
-export function cliAuthPrecondition(context: TContext): string {
-  const token = context.userConfig.getAuthToken();
-  if (!token || token.length === 0) {
-    throw new PreconditionsFailedError(
-      `Please authenticate your Graphite CLI by visiting ${context.userConfig.getAppServerUrl()}/activate`
-    );
-  }
-  return token;
-}
-
 export function currentGitRepoPrecondition(): string {
   const repoRootPath = runGitCommand({
     args: [`rev-parse`, `--show-toplevel`],
