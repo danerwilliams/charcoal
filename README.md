@@ -1,32 +1,30 @@
-# NOTE (7/14/23)
-
-The Graphite CLI team has decided that in order to build the ideal integrated Graphite experience, *we will be developing v1.0 of the Graphite CLI within our monorepo and leaving the public repository archived as an artifact*.  As we begin the next round of development on our CLI and the rollout of GTI, our graphical interface for branch management, this will allow us to iterate quickly and give our users the best possible experience.  We’re excited to show you what we’re working on!
-
-# README
+# Graphite Open Source
 
 ## What is Graphite?
 
-[Graphite](https://graphite.dev) is a **fast, simple code review platform** designed for engineers who want to **write and review smaller pull requests, stay unblocked, and ship faster**.  Anyone can start using Graphite individually without needing their coworkers to change tools - we'll seamlessly sync your code changes and reviews.  We built Graphite because we missed internal code review tools like Phabricator (at Facebook) and Critique (Google) that help engineers create, approve, and ship small, incremental changes, and long-term we’re passionate about creating products & workflows that help fast-moving eng teams achieve more.
+From Graphite:
 
-Graphite is designed to be used at work - unfortunately we don't yet support submitting PRs to open-source repos as an external contributor (i.e. without write access) due to limitations of GitHub.
+> [Graphite](https://graphite.dev) is a **fast, simple code review platform** designed for engineers who want to **write and review smaller pull requests, stay unblocked, and ship faster**.  Anyone can start using Graphite individually without needing their coworkers to change tools - we'll seamlessly sync your code changes and reviews.  We built Graphite because we missed internal code review tools like Phabricator (at Facebook) and Critique (Google) that help engineers create, approve, and ship small, incremental changes, and long-term we’re passionate about creating products & workflows that help fast-moving eng teams achieve more.
 
-## Graphite beta
-Graphite is currently in beta, and you’ll need a Graphite account to submit pull requests with the CLI.  You can [sign up](https://graphite.dev) for early access!
+## What is Graphite Open Source?
+
+Graphite Open Source is simply the Graphite CLI, but open source!
+
+On 7/14/2023 the Graphite team announced that they closed open source development of the Graphite CLI and [moved development to their private monorepo](https://github.com/withgraphite/graphite-cli). They also added a pay wall limiting free users to 10 open stacks at a time per organization starting 8/7/2023.
+
+Graphite is an amazing company and you should absolutely check out their products. In addition to a stacking CLI, they have an entire code review platform, merge queue, and more developer productivity tools.
+
+However, many organizations aren't interested in paying for Graphite's team plan at this time.
+
+The Graphite CLI does not need to depend on Graphite's API, so this project allows for use of the CLI with any git repository (even ones hosted on platforms other than GitHub!), entirely for free.
 
 ## User guide
 
-<https://docs.graphite.dev/>
+<https://graphite.dev/docs/graphite-cli/>
 
-Everything is still a little early, so please add comments to our user guide if you have any questions, feedback, or suggestions!
+Right now, the Graphite Docs are more or less in sync with this Open Source version.
 
-## Changelog
-
-[View the Graphite CLI changelog](apps/cli/.CHANGELOG.md)
-
-## Support
-
-We *do not* consistently check GH issues — if you have any questions or issues, reach out to us on our [Community Slack server](https://join.slack.com/t/graphite-community/shared_invite/zt-1as9rdo7r-pYmEZzt6M1EhTkvJFNhsnQ)!
-
+As Graphite continues to develop their private version of the CLI, however, these will become out of sync. Ideally we can add our own open source docs to accompany this project.
 
 ## Developing and Running tests
 
