@@ -6,7 +6,6 @@ import { getPRDraftStatus } from './pr_draft';
 import { getPRTitle } from './pr_title';
 import { getReviewers } from './reviewers';
 import { TPRSubmissionInfo } from './submit_prs';
-import { cliAuthPrecondition } from '../../lib/preconditions';
 
 type TPRSubmissionAction = { branchName: string } & (
   | { update: false }
@@ -64,7 +63,7 @@ export async function getPRInfoForBranches(
       action.branchName
     );
 
-    const isGithubAuthPresent = cliAuthPrecondition(context);
+    const isGithubAuthPresent = false;
 
     const prCreationInfo = isGithubAuthPresent
       ? await getPRCreationInfo(

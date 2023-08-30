@@ -1,4 +1,3 @@
-import { getGithubAuthorizationStatus } from '../commands/auth';
 import { TContext } from './context';
 import { PreconditionsFailedError } from './errors';
 import { detectStagedChanges } from './git/diff';
@@ -7,21 +6,6 @@ import {
   unstagedChanges,
 } from './git/git_status_utils';
 import { runGitCommand } from './git/runner';
-
-export function cliAuthPrecondition(context: TContext): boolean {
-  const isGhAuthorized = getGithubAuthorizationStatus();
-
-  const isGithubIntegrationEnabled =
-    context.repoConfig.getIsGithubIntegrationEnabled();
-
-  if (!isGhAuthorized && isGithubIntegrationEnabled) {
-    throw new PreconditionsFailedError(
-      `Please authenticate your CLI with Github by running gt auth and then retry. To ignore this message in the future and use Graphite without Github integration, run gt repo disable-github.`
-    );
-  }
-
-  return isGhAuthorized;
-}
 
 export function getRepoRootPathPrecondition(): string {
   const repoRootPath = runGitCommand({
