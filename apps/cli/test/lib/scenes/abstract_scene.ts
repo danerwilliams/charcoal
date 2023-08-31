@@ -30,7 +30,7 @@ export abstract class AbstractScene {
     this.repo = new GitRepo(this.dir);
     fs.writeFileSync(
       `${this.dir}/.git/.graphite_repo_config`,
-      cuteString({ trunk: 'main' })
+      cuteString({ trunk: 'main', isGithubIntegrationEnabled: false })
     );
     const userConfigPath = `${this.dir}/.git/.graphite_user_config`;
     fs.writeFileSync(userConfigPath, cuteString({ tips: false }));
