@@ -64,7 +64,8 @@ export async function getPRInfoForBranches(
       action.branchName
     );
 
-    const isGithubAuthPresent = cliAuthPrecondition(context);
+    // const isGithubAuthPresent = cliAuthPrecondition(context);
+    const isGithubAuthPresent = false;
 
     const prCreationInfo = isGithubAuthPresent
       ? await getPRCreationInfo(
