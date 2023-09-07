@@ -105,24 +105,40 @@ async function submitPrToGithub({
       .toString()
       .trim();
 
-    const prNumber = result.match(/\/pull\/(\d+)$/)?.[1];
-
-    if (!prNumber) {
-      throw Error(`Could not find PR number in response: ${result}`);
-    }
+    const prNumber = getPrNumberFromUrl(result);
 
     return {
       head: request.head,
       status: 'created',
-      prNumber: Number(prNumber),
+      prNumber,
       prURL: result,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      // eslint-disable-next-line no-console
-      console.log({ message: error.message });
+    if (error instanceof Error && error.message.includes('already exists')) {
+      const prUrl = error.message.split('\n').pop();
+
+      if (!prUrl) {
+        throw Error(`Could not find PR URL in response: ${error.message}`);
+      }
+
+      return {
+        head: request.head,
+        status: 'updated',
+        prNumber: getPrNumberFromUrl(prUrl),
+        prURL: prUrl,
+      };
     }
 
     throw Error(`Unknown error: ${error}`);
   }
+}
+
+function getPrNumberFromUrl(url: string): number {
+  const prNumber = url.match(/\/pull\/(\d+)$/)?.[1];
+
+  if (!prNumber) {
+    throw Error(`Could not find PR number in response: ${url}`);
+  }
+
+  return Number(prNumber);
 }
