@@ -116,8 +116,6 @@ async function submitPrToGithub({
   } catch (error) {
     if (error instanceof Error) {
       if (error.message.includes('already exists')) {
-        // eslint-disable-next-line no-console
-        console.log('hello');
         const errorMessageLines = error.message.split('\n');
 
         const prUrl = errorMessageLines[errorMessageLines.length - 2];
