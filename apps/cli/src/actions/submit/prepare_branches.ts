@@ -137,6 +137,11 @@ async function getPRAction(
   const prInfo = context.engine.getPrInfo(args.branchName);
   const prNumber = prInfo?.number;
 
+  // eslint-disable-next-line no-console
+  console.log(prInfo);
+  // eslint-disable-next-line no-console
+  console.log({ prNumber });
+
   const status =
     prNumber === undefined
       ? args.updateOnly
