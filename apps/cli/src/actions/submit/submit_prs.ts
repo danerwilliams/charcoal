@@ -93,7 +93,7 @@ async function submitPrToGithub({
   request: TSubmittedPRRequest;
   _context: TContext;
 }): Promise<TSubmittedPRResponse> {
-  const test = execSync(
+  const result = execSync(
     `gh pr create --head '${request.head}' \
                   --base '${request.base}' \
                   --title '${request.title}' \
