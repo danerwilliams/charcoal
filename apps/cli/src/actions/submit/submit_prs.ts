@@ -94,10 +94,10 @@ async function submitPrToGithub({
   _context: TContext;
 }): Promise<TSubmittedPRResponse> {
   const test = execSync(
-    `gh pr create --head ${request.head} \
-                  --base ${request.base} \
-                  --title ${request.title} \
-                  --body ${request.body} \
+    `gh pr create --head '${request.head}' \
+                  --base '${request.base}' \
+                  --title '${request.title}' \
+                  --body '${request.body}' \
                   ${request.draft ? '--draft' : ''}`
   ).toString();
 
