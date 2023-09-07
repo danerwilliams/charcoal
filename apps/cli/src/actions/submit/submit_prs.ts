@@ -94,26 +94,35 @@ async function submitPrToGithub({
 }: {
   request: TSubmittedPRRequest;
 }): Promise<TSubmittedPRResponse> {
-  const result = execSync(
-    `gh pr create --head '${request.head}' \
+  try {
+    const result = execSync(
+      `gh pr create --head '${request.head}' \
                   --base '${request.base}' \
                   --title '${request.title}' \
                   --body '${request.body}' \
                   ${request.draft ? '--draft' : ''}`
-  )
-    .toString()
-    .trim();
+    )
+      .toString()
+      .trim();
 
-  const prNumber = result.match(/\/pull\/(\d+)$/)?.[1];
+    const prNumber = result.match(/\/pull\/(\d+)$/)?.[1];
 
-  if (!prNumber) {
-    throw Error(`Could not find PR number in response: ${result}`);
+    if (!prNumber) {
+      throw Error(`Could not find PR number in response: ${result}`);
+    }
+
+    return {
+      head: request.head,
+      status: 'created',
+      prNumber: Number(prNumber),
+      prURL: result,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      // eslint-disable-next-line no-console
+      console.log({ message: error.message });
+    }
+
+    throw Error(`Unknown error: ${error}`);
   }
-
-  return {
-    head: request.head,
-    status: 'created',
-    prNumber: Number(prNumber),
-    prURL: result,
-  };
 }
