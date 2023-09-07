@@ -36,9 +36,7 @@ export async function submitPullRequest(
 
   if (pr.response.status === 'error') {
     throw new ExitFailedError(
-      `Failed to submit PR for ${
-        pr.response.head
-      }: ${'TODO: insert error message from gh'}`
+      `Failed to submit PR for ${pr.response.head}: ${pr.response.error}`
     );
   }
 
@@ -75,15 +73,27 @@ async function requestServerToSubmitPR({
   console.log(submissionInfo);
 
   const request = submissionInfo[0];
-  const response = await submitPrToGithub({
-    _context: context,
-    request: request,
-  });
 
-  return {
-    request,
-    response,
-  };
+  try {
+    const response = await submitPrToGithub({
+      _context: context,
+      request: request,
+    });
+
+    return {
+      request,
+      response,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        response: { error: error.message, status: 'error', head: request.head },
+        request,
+      };
+    }
+
+    throw Error(`Unknown error: ${error}`);
+  }
 }
 
 async function submitPrToGithub({
@@ -105,7 +115,7 @@ async function submitPrToGithub({
   console.log({ test });
 
   return {
-    head: 'head',
+    head: request.head,
     status: 'updated',
     prNumber: 1,
     prURL: '',
