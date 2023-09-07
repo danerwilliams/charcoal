@@ -114,20 +114,16 @@ async function submitPrToGithub({
       prURL: result,
     };
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('hello');
-    // eslint-disable-next-line no-console
-    console.log(error);
     if (error instanceof Error) {
-      // eslint-disable-next-line no-console
-      console.log(error.message);
       if (error.message.includes('already exists')) {
         // eslint-disable-next-line no-console
         console.log('hello');
-        const prUrl = error.message.split('\n').pop();
+        const prUrls = error.message.split('\n');
 
         // eslint-disable-next-line no-console
-        console.log({ prUrl });
+        console.log({ prUrls });
+
+        const prUrl = prUrls[0];
 
         if (!prUrl) {
           throw Error(`Could not find PR URL in response: ${error.message}`);
