@@ -118,12 +118,9 @@ async function submitPrToGithub({
       if (error.message.includes('already exists')) {
         // eslint-disable-next-line no-console
         console.log('hello');
-        const prUrls = error.message.split('\n');
+        const errorMessageLines = error.message.split('\n');
 
-        // eslint-disable-next-line no-console
-        console.log({ prUrls });
-
-        const prUrl = prUrls[0];
+        const prUrl = errorMessageLines[errorMessageLines.length - 2];
 
         if (!prUrl) {
           throw Error(`Could not find PR URL in response: ${error.message}`);
