@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
-import { execSync } from 'child_process';
+// import { execSync } from 'child_process';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -76,8 +76,8 @@ async function requestServerToSubmitPR({
 
   try {
     const response = await submitPrToGithub({
-      _context: context,
-      request: request,
+      context,
+      request,
     });
 
     return {
@@ -98,21 +98,22 @@ async function requestServerToSubmitPR({
 
 async function submitPrToGithub({
   request,
-  _context,
+  context,
 }: {
   request: TSubmittedPRRequest;
-  _context: TContext;
+  context: TContext;
 }): Promise<TSubmittedPRResponse> {
-  const result = execSync(
-    `gh pr create --head '${request.head}' \
-                  --base '${request.base}' \
-                  --title '${request.title}' \
-                  --body '${request.body}' \
-                  ${request.draft ? '--draft' : ''}`
-  ).toString();
-
+  const test = context.engine.getPrInfo(request.head);
   // eslint-disable-next-line no-console
   console.log({ test });
+
+  // const result = execSync(
+  //   `gh pr create --head '${request.head}' \
+  //                 --base '${request.base}' \
+  //                 --title '${request.title}' \
+  //                 --body '${request.body}' \
+  //                 ${request.draft ? '--draft' : ''}`
+  // ).toString();
 
   return {
     head: request.head,
