@@ -67,23 +67,24 @@ export async function getPRInfoForBranches(
 
     const isGithubAuthPresent = cliAuthPrecondition(context);
 
-    const prCreationInfo = isGithubAuthPresent
-      ? await getPRCreationInfo(
-          {
-            branchName: action.branchName,
-            editPRFieldsInline: args.editPRFieldsInline,
-            draft: args.draft,
-            publish: args.publish,
-            reviewers: args.reviewers,
-          },
-          context
-        )
-      : {
-          title: '',
-          body: '',
-          reviewers: [],
-          draft: false,
-        };
+    const prCreationInfo =
+      isGithubAuthPresent && !action.update
+        ? await getPRCreationInfo(
+            {
+              branchName: action.branchName,
+              editPRFieldsInline: args.editPRFieldsInline,
+              draft: args.draft,
+              publish: args.publish,
+              reviewers: args.reviewers,
+            },
+            context
+          )
+        : {
+            title: '',
+            body: '',
+            reviewers: [],
+            draft: false,
+          };
 
     submissionInfo.push({
       head: action.branchName,
@@ -136,11 +137,6 @@ async function getPRAction(
   );
   const prInfo = context.engine.getPrInfo(args.branchName);
   const prNumber = prInfo?.number;
-
-  // eslint-disable-next-line no-console
-  console.log(prInfo);
-  // eslint-disable-next-line no-console
-  console.log({ prNumber });
 
   const status =
     prNumber === undefined

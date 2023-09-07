@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
-// import { execSync } from 'child_process';
+import { execSync } from 'child_process';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -31,7 +31,6 @@ export async function submitPullRequest(
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
     submissionInfo: args.submissionInfo,
-    context,
   });
 
   if (pr.response.status === 'error') {
@@ -64,19 +63,13 @@ export async function submitPullRequest(
 
 async function requestServerToSubmitPR({
   submissionInfo,
-  context,
 }: {
   submissionInfo: TPRSubmissionInfo;
-  context: TContext;
 }): Promise<TSubmittedPR> {
-  // eslint-disable-next-line no-console
-  console.log(submissionInfo);
-
   const request = submissionInfo[0];
 
   try {
     const response = await submitPrToGithub({
-      context,
       request,
     });
 
@@ -98,27 +91,29 @@ async function requestServerToSubmitPR({
 
 async function submitPrToGithub({
   request,
-  context,
 }: {
   request: TSubmittedPRRequest;
-  context: TContext;
 }): Promise<TSubmittedPRResponse> {
-  const test = context.engine.getPrInfo(request.head);
-  // eslint-disable-next-line no-console
-  console.log({ test });
+  const result = execSync(
+    `gh pr create --head '${request.head}' \
+                  --base '${request.base}' \
+                  --title '${request.title}' \
+                  --body '${request.body}' \
+                  ${request.draft ? '--draft' : ''}`
+  )
+    .toString()
+    .trim();
 
-  // const result = execSync(
-  //   `gh pr create --head '${request.head}' \
-  //                 --base '${request.base}' \
-  //                 --title '${request.title}' \
-  //                 --body '${request.body}' \
-  //                 ${request.draft ? '--draft' : ''}`
-  // ).toString();
+  const prNumber = result.match(/\/pull\/(\d+)$/)?.[1];
+
+  if (!prNumber) {
+    throw Error(`Could not find PR number in response: ${result}`);
+  }
 
   return {
     head: request.head,
-    status: 'updated',
-    prNumber: 1,
-    prURL: '',
+    status: 'created',
+    prNumber: Number(prNumber),
+    prURL: result,
   };
 }
