@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
+import { execSync } from 'child_process';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -25,18 +26,13 @@ export async function submitPullRequest(
     submissionInfo: TPRSubmissionInfo;
     mergeWhenReady: boolean;
     trunkBranchName: string;
-    cliAuthToken: string;
   },
   context: TContext
 ): Promise<void> {
-  const pr = (
-    await requestServerToSubmitPRs({
-      submissionInfo: args.submissionInfo,
-      mergeWhenReady: args.mergeWhenReady,
-      trunkBranchName: args.trunkBranchName,
-      context,
-    })
-  )[0];
+  const pr = await requestServerToSubmitPR({
+    submissionInfo: args.submissionInfo,
+    context,
+  });
 
   if (pr.response.status === 'error') {
     throw new ExitFailedError(
@@ -68,51 +64,44 @@ export async function submitPullRequest(
   );
 }
 
-async function requestServerToSubmitPRs({
+async function requestServerToSubmitPR({
   submissionInfo,
   context,
-}: // mergeWhenReady,
-// trunkBranchName,
-{
+}: {
   submissionInfo: TPRSubmissionInfo;
-  mergeWhenReady: boolean;
-  trunkBranchName: string;
   context: TContext;
-}): Promise<TSubmittedPR[]> {
-  // const response = await requestWithArgs(
-  //   context.userConfig,
-  //   API_ROUTES.submitPullRequests,
-  //   {
-  //     repoOwner: context.repoConfig.getRepoOwner(),
-  //     repoName: context.repoConfig.getRepoName(),
-  //     mergeWhenReady,
-  //     trunkBranchName,
-  //     prs: submissionInfo,
-  //   }
-  // );
-  context.splog.info(submissionInfo.toString());
+}): Promise<TSubmittedPR> {
+  // eslint-disable-next-line no-console
+  console.log(submissionInfo);
 
-  const response: { prs: TSubmittedPRResponse[] } = {
-    prs: [
-      {
-        head: '',
-        status: 'created',
-        prNumber: 1,
-        prURL: '',
-      },
-    ],
+  const request = submissionInfo[0];
+  const response = await submitPrToGithub({
+    _context: context,
+    _request: request,
+  });
+
+  return {
+    request,
+    response,
   };
+}
 
-  const requests: { [head: string]: TSubmittedPRRequest } = {};
+async function submitPrToGithub({
+  _request,
+  _context,
+}: {
+  _request: TSubmittedPRRequest;
+  _context: TContext;
+}): Promise<TSubmittedPRResponse> {
+  const test = execSync('echo test').toString();
 
-  submissionInfo.forEach((prRequest) => {
-    requests[prRequest.head] = prRequest;
-  });
+  // eslint-disable-next-line no-console
+  console.log({ test });
 
-  return response.prs.map((prResponse) => {
-    return {
-      request: requests[prResponse.head],
-      response: prResponse,
-    };
-  });
+  return {
+    head: 'head',
+    status: 'updated',
+    prNumber: 1,
+    prURL: '',
+  };
 }

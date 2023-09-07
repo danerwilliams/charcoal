@@ -5,6 +5,7 @@ import { ExitFailedError, KilledError } from '../../lib/errors';
 import { CommandFailedError } from '../../lib/git/runner';
 import { getPRInfoForBranches } from './prepare_branches';
 import { validateBranchesToSubmit } from './validate_branches';
+import { submitPullRequest } from './submit_prs';
 
 // eslint-disable-next-line max-lines-per-function
 export async function submitAction(
@@ -126,6 +127,15 @@ export async function submitAction(
       }
       throw err;
     }
+
+    await submitPullRequest(
+      {
+        submissionInfo: [submissionInfo],
+        mergeWhenReady: args.mergeWhenReady,
+        trunkBranchName: context.engine.trunk,
+      },
+      context
+    );
   }
 
   if (!context.interactive) {
