@@ -118,19 +118,28 @@ async function submitPrToGithub({
     console.log('hello');
     // eslint-disable-next-line no-console
     console.log(error);
-    if (error instanceof Error && error.message.includes('already exists')) {
-      const prUrl = error.message.split('\n').pop();
+    if (error instanceof Error) {
+      // eslint-disable-next-line no-console
+      console.log(error.message);
+      if (!error.message.includes('already exists')) {
+        // eslint-disable-next-line no-console
+        console.log('hello');
+        const prUrl = error.message.split('\n').pop();
 
-      if (!prUrl) {
-        throw Error(`Could not find PR URL in response: ${error.message}`);
+        // eslint-disable-next-line no-console
+        console.log({ prUrl });
+
+        if (!prUrl) {
+          throw Error(`Could not find PR URL in response: ${error.message}`);
+        }
+
+        return {
+          head: request.head,
+          status: 'updated',
+          prNumber: getPrNumberFromUrl(prUrl),
+          prURL: prUrl,
+        };
       }
-
-      return {
-        head: request.head,
-        status: 'updated',
-        prNumber: getPrNumberFromUrl(prUrl),
-        prURL: prUrl,
-      };
     }
 
     throw Error(`Unknown error: ${error}`);
