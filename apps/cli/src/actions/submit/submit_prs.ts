@@ -77,7 +77,7 @@ async function requestServerToSubmitPR({
   const request = submissionInfo[0];
   const response = await submitPrToGithub({
     _context: context,
-    _request: request,
+    request: request,
   });
 
   return {
@@ -87,13 +87,19 @@ async function requestServerToSubmitPR({
 }
 
 async function submitPrToGithub({
-  _request,
+  request,
   _context,
 }: {
-  _request: TSubmittedPRRequest;
+  request: TSubmittedPRRequest;
   _context: TContext;
 }): Promise<TSubmittedPRResponse> {
-  const test = execSync('echo test').toString();
+  const test = execSync(
+    `gh pr create --head ${request.head} \
+                  --base ${request.base} \
+                  --title ${request.title} \
+                  --body ${request.body} \
+                  ${request.draft ? '--draft' : ''}`
+  ).toString();
 
   // eslint-disable-next-line no-console
   console.log({ test });
