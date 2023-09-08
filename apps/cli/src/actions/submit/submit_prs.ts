@@ -97,20 +97,22 @@ async function submitPrToGithub({
   try {
     const prInfo = await JSON.parse(
       execSync(
-        `gh pr view ${request.head} --json head,url,number,base`
+        `gh pr view ${request.head} --json headRefName,url,number,baseRefName`
       ).toString()
     );
 
-    if (prInfo.head !== request.head) {
-      throw Error(`PR head mismatch: ${prInfo.head} !== ${request.head}`);
+    if (prInfo.headRefName !== request.head) {
+      throw Error(
+        `PR head mismatch: ${prInfo.headRefName} !== ${request.head}`
+      );
     }
 
-    if (prInfo.base !== request.base) {
-      execSync(`gh pr edit ${prInfo.head} --base ${request.base}`);
+    if (prInfo.baseRefName !== request.base) {
+      execSync(`gh pr edit ${prInfo.headRefName} --base ${request.base}`);
     }
 
     return {
-      head: prInfo.head,
+      head: prInfo.headRefName,
       status: 'updated',
       prNumber: prInfo.number,
       prURL: prInfo.url,
