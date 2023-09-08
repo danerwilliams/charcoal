@@ -42,9 +42,6 @@ export async function getPrInfoForBranches(
           ).toString()
         );
 
-        // eslint-disable-next-line no-console
-        console.log(pr);
-
         pr.prNumber = pr.number;
         delete pr.number;
 
