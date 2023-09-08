@@ -95,45 +95,52 @@ async function submitPrToGithub({
   request: TSubmittedPRRequest;
 }): Promise<TSubmittedPRResponse> {
   try {
-    const result = execSync(
-      `gh pr create --head '${request.head}' \
-                  --base '${request.base}' \
-                  --title '${request.title}' \
-                  --body '${request.body}' \
-                  ${request.draft ? '--draft' : ''}`
-    )
-      .toString()
-      .trim();
+    const prInfo = await JSON.parse(
+      execSync(
+        `gh pr view ${request.head} --json head,url,number,base`
+      ).toString()
+    );
 
-    const prNumber = getPrNumberFromUrl(result);
-
-    return {
-      head: request.head,
-      status: 'created',
-      prNumber,
-      prURL: result,
-    };
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message.includes('already exists')) {
-        const errorMessageLines = error.message.split('\n');
-
-        const prUrl = errorMessageLines[errorMessageLines.length - 2];
-
-        if (!prUrl) {
-          throw Error(`Could not find PR URL in response: ${error.message}`);
-        }
-
-        return {
-          head: request.head,
-          status: 'updated',
-          prNumber: getPrNumberFromUrl(prUrl),
-          prURL: prUrl,
-        };
-      }
+    if (prInfo.head !== request.head) {
+      throw Error(`PR head mismatch: ${prInfo.head} !== ${request.head}`);
     }
 
-    throw Error(`Unknown error: ${error}`);
+    if (prInfo.base !== request.base) {
+      execSync(`gh pr edit ${prInfo.head} --base ${request.base}`);
+    }
+
+    return {
+      head: prInfo.head,
+      status: 'updated',
+      prNumber: prInfo.number,
+      prURL: prInfo.url,
+    };
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes('no pull requests found')
+    ) {
+      const result = execSync(
+        `gh pr create --head '${request.head}' \
+                    --base '${request.base}' \
+                    --title '${request.title}' \
+                    --body '${request.body}' \
+                    ${request.draft ? '--draft' : ''}`
+      )
+        .toString()
+        .trim();
+
+      const prNumber = getPrNumberFromUrl(result);
+
+      return {
+        head: request.head,
+        status: 'created',
+        prNumber,
+        prURL: result,
+      };
+    }
+
+    throw error;
   }
 }
 
