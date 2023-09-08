@@ -5,6 +5,7 @@ import { KilledError } from '../../lib/errors';
 import { uncommittedTrackedChangesPrecondition } from '../../lib/preconditions';
 import { restackBranches } from '../restack';
 import { cleanBranches } from './clean_branches';
+import { syncPrInfo } from '../sync_pr_info';
 
 export async function syncAction(
   opts: {
@@ -25,7 +26,7 @@ export async function syncAction(
 
   const branchesToRestack: string[] = [];
 
-  // TODO: Sync PR info with GitHub API, syncing with Graphite API was removed here
+  await syncPrInfo(context.engine.allBranchNames, context);
 
   if (opts.delete) {
     context.splog.info(
