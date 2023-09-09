@@ -1,5 +1,9 @@
 # Graphite Open Source
 
+> A CLI for managing stacked pull requests
+
+<img width="1346" alt="CleanShot 2023-09-09 at 19 48 49@2x" src="https://github.com/danerwilliams/graphite-cli/assets/22798229/17385828-f235-4b56-84dd-ad73350d55b9">
+
 ## What is Graphite?
 
 From Graphite:
