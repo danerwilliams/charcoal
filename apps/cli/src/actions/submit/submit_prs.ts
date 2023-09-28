@@ -5,6 +5,7 @@ import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
 import { execSync } from 'child_process';
+import { createPrBodyFooter } from '../create_pr_body_footer';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -100,6 +101,8 @@ async function submitPrToGithub({
   request: TSubmittedPRRequest;
   context: TContext;
 }): Promise<TSubmittedPRResponse> {
+  createPrBodyFooter(context, request.head);
+
   try {
     const prInfo = await JSON.parse(
       execSync(
