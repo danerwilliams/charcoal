@@ -10,6 +10,10 @@ export function createPrBodyFooter(context: TContext, branch: string): string {
 function findTerminalParent(context: TContext, currentBranch: string): string {
   const parent = context.engine.getParent(currentBranch);
   if (!parent) {
+    throw new Error('Parent branch is undefined');
+  }
+
+  if (context.engine.isTrunk(parent)) {
     return currentBranch;
   }
 
