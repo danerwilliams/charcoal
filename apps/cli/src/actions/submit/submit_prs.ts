@@ -31,6 +31,7 @@ export async function submitPullRequest(
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
     submissionInfo: args.submissionInfo,
+    context,
   });
 
   if (pr.response.status === 'error') {
@@ -63,14 +64,17 @@ export async function submitPullRequest(
 
 async function requestServerToSubmitPR({
   submissionInfo,
+  context,
 }: {
   submissionInfo: TPRSubmissionInfo;
+  context: TContext;
 }): Promise<TSubmittedPR> {
   const request = submissionInfo[0];
 
   try {
     const response = await submitPrToGithub({
       request,
+      context,
     });
 
     return {
@@ -91,8 +95,10 @@ async function requestServerToSubmitPR({
 
 async function submitPrToGithub({
   request,
+  context,
 }: {
   request: TSubmittedPRRequest;
+  context: TContext;
 }): Promise<TSubmittedPRResponse> {
   try {
     const prInfo = await JSON.parse(
