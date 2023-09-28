@@ -1,6 +1,7 @@
 import { TContext } from '../lib/context';
 
 export function createPrBodyFooter(context: TContext, branch: string): string {
+  console.log('testing');
   const terminalParent = findTerminalParent(context, branch);
 
   const tree = buildBranchTree({
