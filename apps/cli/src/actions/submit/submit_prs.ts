@@ -101,11 +101,11 @@ async function submitPrToGithub({
   request: TSubmittedPRRequest;
   context: TContext;
 }): Promise<TSubmittedPRResponse> {
-  // eslint-disable-next-line no-console
-  console.log('testing');
-  createPrBodyFooter(context, request.head);
-
   try {
+    // eslint-disable-next-line no-console
+    console.log('update');
+    createPrBodyFooter(context, request.head);
+
     const prInfo = await JSON.parse(
       execSync(
         `gh pr view ${request.head} --json headRefName,url,number,baseRefName`
@@ -144,6 +144,10 @@ async function submitPrToGithub({
         .trim();
 
       const prNumber = getPrNumberFromUrl(result);
+
+      // eslint-disable-next-line no-console
+      console.log('create');
+      createPrBodyFooter(context, request.head, prNumber);
 
       return {
         head: request.head,

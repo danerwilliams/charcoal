@@ -1,6 +1,10 @@
 import { TContext } from '../lib/context';
 
-export function createPrBodyFooter(context: TContext, branch: string): string {
+export function createPrBodyFooter(
+  context: TContext,
+  branch: string,
+  prNumber?: number
+): string {
   const terminalParent = findTerminalParent(context, branch);
 
   const tree = buildBranchTree({
@@ -8,6 +12,7 @@ export function createPrBodyFooter(context: TContext, branch: string): string {
     currentBranches: [terminalParent],
     currentTree: '',
     prBranch: branch,
+    prNumber,
     currentDepth: 0,
   });
 
@@ -21,12 +26,14 @@ function buildBranchTree({
   currentBranches,
   currentTree,
   prBranch,
+  prNumber,
   currentDepth,
 }: {
   context: TContext;
   currentBranches: string[];
   currentTree: string;
   prBranch: string;
+  prNumber?: number;
   currentDepth: number;
 }): string {
   for (const branch of currentBranches) {
@@ -45,6 +52,7 @@ function buildBranchTree({
         currentBranches: children,
         currentTree,
         prBranch,
+        prNumber,
         currentDepth: currentDepth + 1,
       })}`;
     }
@@ -58,19 +66,26 @@ function buildLeaf({
   branch,
   depth,
   prBranch,
+  prNumber,
 }: {
   context: TContext;
   branch: string;
   depth: number;
   prBranch: string;
+  prNumber?: number;
 }): string {
   const prInfo = context.engine.getPrInfo(branch);
 
-  if (!prInfo?.number) {
+  // If the PR is being created for the first time, it hasn't been assigned a number yet.
+  // We allow for passing the number to do an update to the body after PR creation to handle that case.
+  // The PR hasn't been persisted by the context.engine yet, so we manually pass it as a parameter to this method
+  const number = prInfo?.number ?? prNumber;
+
+  if (!number) {
     throw new Error('PR number is undefined');
   }
 
-  return `${' '.repeat(depth)}* **PR #${prInfo.number}**${
+  return `${' '.repeat(depth)}* **PR #${number}**${
     branch === prBranch ? ' 👈' : ''
   }`;
 }
