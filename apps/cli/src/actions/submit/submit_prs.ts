@@ -146,7 +146,7 @@ async function submitPrToGithub({
       const prNumber = getPrNumberFromUrl(result);
 
       // eslint-disable-next-line no-console
-      console.log('create');
+      console.log(`create: ${prNumber}`);
       createPrBodyFooter(context, request.head, prNumber);
 
       return {

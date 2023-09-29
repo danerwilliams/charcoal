@@ -42,6 +42,7 @@ function buildBranchTree({
       branch,
       depth: currentDepth,
       prBranch,
+      prNumber,
     })}`;
 
     const children = context.engine.getChildren(branch);
