@@ -5,7 +5,11 @@ import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
 import { execSync } from 'child_process';
-import { createPrBodyFooter } from '../create_pr_body_footer';
+import {
+  createPrBodyFooter,
+  footerFooter,
+  footerTitle,
+} from '../create_pr_body_footer';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -104,7 +108,7 @@ async function submitPrToGithub({
   try {
     const prInfo = await JSON.parse(
       execSync(
-        `gh pr view ${request.head} --json headRefName,url,number,baseRefName`
+        `gh pr view ${request.head} --json headRefName,url,number,baseRefName,body`
       ).toString()
     );
 
@@ -114,12 +118,25 @@ async function submitPrToGithub({
       );
     }
 
-    // eslint-disable-next-line no-console
-    console.log('update');
-    createPrBodyFooter(context, request.head);
+    const footer = createPrBodyFooter(context, request.head);
 
-    if (prInfo.baseRefName !== request.base) {
-      execSync(`gh pr edit ${prInfo.headRefName} --base ${request.base}`);
+    const prBaseChanged = prInfo.baseRefName !== request.base;
+    const prFooterChanged = !prInfo.body.includes(footer);
+
+    if (prBaseChanged || prFooterChanged) {
+      execSync(
+        `gh pr edit ${prInfo.headRefName} ${
+          prBaseChanged ? `--base ${request.base}` : ''
+        } ${
+          prFooterChanged
+            ? `--body '${prInfo.body.replace(
+                new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+                footer
+              )}'`
+            : ''
+        }
+      `
+      );
     }
 
     return {
@@ -145,9 +162,8 @@ async function submitPrToGithub({
 
       const prNumber = getPrNumberFromUrl(result);
 
-      // eslint-disable-next-line no-console
-      console.log(`create: ${prNumber}`);
-      createPrBodyFooter(context, request.head, prNumber);
+      const footer = createPrBodyFooter(context, request.head, prNumber);
+      execSync(`gh pr edit ${prNumber} --body '${request.body + footer}'`);
 
       return {
         head: request.head,
