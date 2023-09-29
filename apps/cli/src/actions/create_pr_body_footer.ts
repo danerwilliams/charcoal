@@ -38,7 +38,7 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    if (branch !== prBranch || !isParentOfBranch(context, branch, prBranch)) {
+    if (branch !== prBranch && !isParentOfBranch(context, branch, prBranch)) {
       continue;
     }
 
