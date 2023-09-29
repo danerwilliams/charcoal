@@ -123,6 +123,16 @@ async function submitPrToGithub({
     const prBaseChanged = prInfo.baseRefName !== request.base;
     const prFooterChanged = !prInfo.body.includes(footer);
 
+    // eslint-disable-next-line no-console
+    console.log(prBaseChanged, prFooterChanged);
+    // eslint-disable-next-line no-console
+    console.log(
+      prInfo.body.replace(
+        new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+        footer
+      )
+    );
+
     if (prBaseChanged || prFooterChanged) {
       execSync(
         `gh pr edit ${prInfo.headRefName} ${
