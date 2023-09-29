@@ -120,13 +120,18 @@ async function submitPrToGithub({
 
     const footer = createPrBodyFooter(context, request.head);
 
-    // eslint-disable-next-line no-console
-    console.log('test');
-    // eslint-disable-next-line no-console
-    console.log(footer);
-
     const prBaseChanged = prInfo.baseRefName !== request.base;
     const prFooterChanged = !prInfo.body.includes(footer);
+
+    // eslint-disable-next-line no-console
+    console.log(prFooterChanged);
+    // eslint-disable-next-line no-console
+    console.log(
+      prInfo.body.replace(
+        new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+        '' // instead of just replacing with footer we handle the case where there is no existing footer
+      ) + footer
+    );
 
     if (prBaseChanged || prFooterChanged) {
       execSync(
