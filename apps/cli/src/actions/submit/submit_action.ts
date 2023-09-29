@@ -155,8 +155,9 @@ export async function submitAction(
     (branchName) => !alreadyUpdatedBranches.has(branchName)
   );
 
-  // eslint-disable-next-line no-console
-  console.log(branchesToUpdateBodyFooter);
+  context.splog.info(
+    chalk.blueBright('🌳 Updating dependency trees in PR bodies...')
+  );
 
   for (const branch of branchesToUpdateBodyFooter) {
     const prInfo = context.engine.getPrInfo(branch);
