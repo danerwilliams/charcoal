@@ -139,10 +139,12 @@ async function submitPrToGithub({
           prBaseChanged ? `--base ${request.base}` : ''
         } ${
           prFooterChanged
-            ? `--body '${prInfo.body.replace(
-                new RegExp(footerTitle + '.*?' + footerFooter, 's'),
-                footer
-              )}'`
+            ? `--body '${
+                prInfo.body.replace(
+                  new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+                  '' // instead of just replacing with footer we handle the case where there is no existing footer
+                ) + footer
+              }'`
             : ''
         }
       `
