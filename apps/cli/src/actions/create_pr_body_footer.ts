@@ -38,7 +38,7 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    if (!context.engine.getChildren(branch).includes(branch)) {
+    if (!context.engine.getChildren(branch).includes(prBranch)) {
       continue;
     }
 

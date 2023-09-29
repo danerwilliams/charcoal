@@ -113,9 +113,6 @@ export async function submitAction(
     chalk.blueBright('📨 Pushing to remote and creating/updating PRs...')
   );
 
-  // eslint-disable-next-line no-console
-  console.log(submissionInfos);
-
   for (const submissionInfo of submissionInfos) {
     try {
       context.engine.pushBranch(submissionInfo.head, args.forcePush);
@@ -156,7 +153,7 @@ export async function submitAction(
   );
 
   context.splog.info(
-    chalk.blueBright('🌳 Updating dependency trees in PR bodies...')
+    chalk.blueBright('\n🌳 Updating dependency trees in PR bodies...')
   );
 
   for (const branch of branchesToUpdateBodyFooter) {
