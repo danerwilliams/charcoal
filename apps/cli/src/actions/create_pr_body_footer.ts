@@ -14,7 +14,6 @@ export function createPrBodyFooter(
   const tree = buildBranchTree({
     context,
     currentBranches: [terminalParent],
-    currentTree: '',
     prBranch: branch,
     prNumber,
     currentDepth: 0,
@@ -26,20 +25,20 @@ export function createPrBodyFooter(
 function buildBranchTree({
   context,
   currentBranches,
-  currentTree,
   prBranch,
   prNumber,
   currentDepth,
 }: {
   context: TContext;
   currentBranches: string[];
-  currentTree: string;
   prBranch: string;
   prNumber?: number;
   currentDepth: number;
 }): string {
+  let tree = '';
+
   for (const branch of currentBranches) {
-    currentTree += `\n${buildLeaf({
+    tree += `\n${buildLeaf({
       context,
       branch,
       depth: currentDepth,
@@ -50,10 +49,9 @@ function buildBranchTree({
     const children = context.engine.getChildren(branch);
 
     if (children.length) {
-      currentTree += `\n${buildBranchTree({
+      tree += `\n${buildBranchTree({
         context,
         currentBranches: children,
-        currentTree,
         prBranch,
         prNumber,
         currentDepth: currentDepth + 1,
@@ -61,7 +59,7 @@ function buildBranchTree({
     }
   }
 
-  return currentTree;
+  return tree;
 }
 
 function buildLeaf({
