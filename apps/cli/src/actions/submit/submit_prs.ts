@@ -102,10 +102,6 @@ async function submitPrToGithub({
   context: TContext;
 }): Promise<TSubmittedPRResponse> {
   try {
-    // eslint-disable-next-line no-console
-    console.log('update');
-    createPrBodyFooter(context, request.head);
-
     const prInfo = await JSON.parse(
       execSync(
         `gh pr view ${request.head} --json headRefName,url,number,baseRefName`
@@ -117,6 +113,10 @@ async function submitPrToGithub({
         `PR head mismatch: ${prInfo.headRefName} !== ${request.head}`
       );
     }
+
+    // eslint-disable-next-line no-console
+    console.log('update');
+    createPrBodyFooter(context, request.head);
 
     if (prInfo.baseRefName !== request.base) {
       execSync(`gh pr edit ${prInfo.headRefName} --base ${request.base}`);
