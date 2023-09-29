@@ -79,6 +79,9 @@ export async function submitAction(
   context.splog.newline();
   await validateBranchesToSubmit(branchNames, context);
 
+  // eslint-disable-next-line no-console
+  console.log(branchNames);
+
   context.splog.info(
     chalk.blueBright(
       '✏️  Preparing to submit PRs for the following branches...'
