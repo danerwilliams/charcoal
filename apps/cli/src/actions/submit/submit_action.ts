@@ -6,6 +6,12 @@ import { CommandFailedError } from '../../lib/git/runner';
 import { getPRInfoForBranches } from './prepare_branches';
 import { validateBranchesToSubmit } from './validate_branches';
 import { submitPullRequest } from './submit_prs';
+import {
+  createPrBodyFooter,
+  footerFooter,
+  footerTitle,
+} from '../create_pr_body_footer';
+import { execSync } from 'child_process';
 
 // eslint-disable-next-line max-lines-per-function
 export async function submitAction(
@@ -61,15 +67,9 @@ export async function submitAction(
     .getRelativeStack(context.engine.currentBranchPrecondition, args.scope)
     .filter((branchName) => !context.engine.isTrunk(branchName));
 
-  // eslint-disable-next-line no-console
-  console.log(allBranchNames);
-
   const branchNames = args.select
     ? await selectBranches(context, allBranchNames)
     : allBranchNames;
-
-  //eslint-disable-next-line no-console
-  console.log(branchNames);
 
   context.splog.info(
     chalk.blueBright(
@@ -78,9 +78,6 @@ export async function submitAction(
   );
   context.splog.newline();
   await validateBranchesToSubmit(branchNames, context);
-
-  // eslint-disable-next-line no-console
-  console.log(branchNames);
 
   context.splog.info(
     chalk.blueBright(
@@ -148,6 +145,40 @@ export async function submitAction(
       },
       context
     );
+  }
+
+  const alreadyUpdatedBranches = new Set(
+    submissionInfos.map((submissionInfo) => submissionInfo.head)
+  );
+
+  const branchesToUpdateBodyFooter = branchNames.filter(
+    (branchName) => !alreadyUpdatedBranches.has(branchName)
+  );
+
+  // eslint-disable-next-line no-console
+  console.log(branchesToUpdateBodyFooter);
+
+  for (const branch of branchesToUpdateBodyFooter) {
+    const prInfo = context.engine.getPrInfo(branch);
+    const footer = createPrBodyFooter(context, branch);
+
+    if (!prInfo) {
+      throw new Error(`PR info is undefined for branch ${branch}`);
+    }
+
+    const prFooterChanged = !prInfo.body?.includes(footer);
+
+    if (prFooterChanged) {
+      execSync(
+        `gh pr edit ${prInfo.number} --body '${
+          prInfo.body?.replace(
+            new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+            '' // instead of just replacing with footer we handle the case where there is no existing footer
+          ) + footer
+        }'
+      `
+      );
+    }
   }
 
   if (!context.interactive) {
