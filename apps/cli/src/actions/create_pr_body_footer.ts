@@ -49,7 +49,7 @@ function buildBranchTree({
     const children = context.engine.getChildren(branch);
 
     if (children.length) {
-      tree += `\n${buildBranchTree({
+      tree += `${buildBranchTree({
         context,
         currentBranches: children,
         prBranch,
