@@ -61,9 +61,15 @@ export async function submitAction(
     .getRelativeStack(context.engine.currentBranchPrecondition, args.scope)
     .filter((branchName) => !context.engine.isTrunk(branchName));
 
+  // eslint-disable-next-line no-console
+  console.log(allBranchNames);
+
   const branchNames = args.select
     ? await selectBranches(context, allBranchNames)
     : allBranchNames;
+
+  //eslint-disable-next-line no-console
+  console.log(branchNames);
 
   context.splog.info(
     chalk.blueBright(
