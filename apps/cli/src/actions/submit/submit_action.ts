@@ -107,6 +107,9 @@ export async function submitAction(
     chalk.blueBright('📨 Pushing to remote and creating/updating PRs...')
   );
 
+  // eslint-disable-next-line no-console
+  console.log(submissionInfos);
+
   for (const submissionInfo of submissionInfos) {
     try {
       context.engine.pushBranch(submissionInfo.head, args.forcePush);
