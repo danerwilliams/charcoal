@@ -19,9 +19,6 @@ export function createPrBodyFooter(
     currentDepth: 0,
   });
 
-  // eslint-disable-next-line no-console
-  console.log(tree);
-
   return `${footerTitle}${tree}${footerFooter}`;
 }
 
@@ -41,7 +38,7 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    if (!isParentOfBranch(context, branch, prBranch)) {
+    if (branch !== prBranch || !isParentOfBranch(context, branch, prBranch)) {
       continue;
     }
 
