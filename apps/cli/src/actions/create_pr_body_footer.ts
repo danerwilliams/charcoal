@@ -41,9 +41,7 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    // eslint-disable-next-line no-console
-    console.log(context.engine.getChildren(branch));
-    if (!context.engine.getChildren(branch).includes(prBranch)) {
+    if (!isParentOfBranch(context, branch, prBranch)) {
       continue;
     }
 
@@ -111,4 +109,24 @@ function findTerminalParent(context: TContext, currentBranch: string): string {
   }
 
   return findTerminalParent(context, parent);
+}
+
+function isParentOfBranch(
+  context: TContext,
+  parent: string,
+  branch: string
+): boolean {
+  const children = context.engine.getChildren(parent);
+
+  if (children.includes(branch)) {
+    return true;
+  }
+
+  for (const child of children) {
+    if (isParentOfBranch(context, child, branch)) {
+      return true;
+    }
+  }
+
+  return false;
 }
