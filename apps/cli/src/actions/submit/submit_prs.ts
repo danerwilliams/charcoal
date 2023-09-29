@@ -101,6 +101,7 @@ async function submitPrToGithub({
   request: TSubmittedPRRequest;
   context: TContext;
 }): Promise<TSubmittedPRResponse> {
+  // eslint-disable-next-line no-console
   console.log('testing');
   createPrBodyFooter(context, request.head);
 
