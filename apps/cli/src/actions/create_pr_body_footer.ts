@@ -19,6 +19,9 @@ export function createPrBodyFooter(
     currentDepth: 0,
   });
 
+  // eslint-disable-next-line no-console
+  console.log(tree);
+
   return `${footerTitle}${tree}${footerFooter}`;
 }
 
@@ -38,6 +41,8 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
+    // eslint-disable-next-line no-console
+    console.log(context.engine.getChildren(branch));
     if (!context.engine.getChildren(branch).includes(prBranch)) {
       continue;
     }
