@@ -120,18 +120,13 @@ async function submitPrToGithub({
 
     const footer = createPrBodyFooter(context, request.head);
 
+    // eslint-disable-next-line no-console
+    console.log('test');
+    // eslint-disable-next-line no-console
+    console.log(footer);
+
     const prBaseChanged = prInfo.baseRefName !== request.base;
     const prFooterChanged = !prInfo.body.includes(footer);
-
-    // eslint-disable-next-line no-console
-    console.log(prBaseChanged, prFooterChanged);
-    // eslint-disable-next-line no-console
-    console.log(
-      prInfo.body.replace(
-        new RegExp(footerTitle + '.*?' + footerFooter, 's'),
-        footer
-      )
-    );
 
     if (prBaseChanged || prFooterChanged) {
       execSync(
