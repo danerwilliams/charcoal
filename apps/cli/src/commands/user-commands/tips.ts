@@ -19,7 +19,7 @@ const args = {
 type argsT = yargs.Arguments<yargs.InferredOptionTypes<typeof args>>;
 
 export const command = 'tips';
-export const description = 'Show tips while using Graphite';
+export const description = 'Show tips while using Charcoal';
 export const canonical = 'user tips';
 export const builder = args;
 export const handler = async (argv: argsT): Promise<void> => {

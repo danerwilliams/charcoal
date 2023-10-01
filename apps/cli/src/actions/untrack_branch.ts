@@ -12,7 +12,7 @@ export async function untrackBranch(
 
   if (!context.engine.isBranchTracked(branchName)) {
     context.splog.info(
-      `Branch ${chalk.yellow(branchName)} is not tracked by Graphite.`
+      `Branch ${chalk.yellow(branchName)} is not tracked by Charcoal.`
     );
     return;
   }

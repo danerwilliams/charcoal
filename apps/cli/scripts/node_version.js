@@ -11,5 +11,5 @@ try {
     process.exit(1);
   }
 } catch {
-  console.error(`Unable to validate Node.js version.  Note that Graphite requires v14 or higher.`)
+  console.error(`Unable to validate Node.js version.  Note that Charcoal requires v14 or higher.`)
 }

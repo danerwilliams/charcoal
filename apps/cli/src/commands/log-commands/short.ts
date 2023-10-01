@@ -40,7 +40,7 @@ const args = {
 
 export const command = 'short';
 export const description =
-  'Log all stacks tracked by Graphite, arranged to show dependencies.';
+  'Log all stacks tracked by Charcoal, arranged to show dependencies.';
 export const builder = args;
 export const aliases = ['s'];
 export const canonical = 'log short';

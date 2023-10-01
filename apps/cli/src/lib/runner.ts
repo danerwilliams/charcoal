@@ -131,7 +131,7 @@ async function graphiteHelper(
       !context.repoConfig.graphiteInitialized()
     ) {
       context.splog.info(
-        `Graphite has not been initialized, attempting to setup now...`
+        `Charcoal has not been initialized, attempting to setup now...`
       );
       context.splog.newline();
       await init({}, context);
@@ -153,7 +153,7 @@ async function graphiteHelper(
       context.engine.persist();
     } catch (persistError) {
       context.engine.clear();
-      context.splog.debug(`Failed to persist Graphite cache`);
+      context.splog.debug(`Failed to persist Charcoal cache`);
     }
     handler.cacheLock.release();
   }

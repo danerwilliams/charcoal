@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "graphite-client",
+  "name": "charcoal",
   "workspaces": {
     "packages": [
       "./apps/cli",

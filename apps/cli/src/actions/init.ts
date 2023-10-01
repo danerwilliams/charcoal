@@ -16,16 +16,16 @@ export async function init(
 
   context.splog.info(
     context.repoConfig.graphiteInitialized()
-      ? `Reinitializing Graphite...`
-      : `Welcome to Graphite!`
+      ? `Reinitializing Charcoal...`
+      : `Welcome to Charcoal!`
   );
   context.splog.newline();
 
   if (allBranchNames.length === 0) {
     throw new PreconditionsFailedError(
       [
-        `No branches found in current repo; cannot initialize Graphite.`,
-        `Please create your first commit and then re-run your Graphite command.`,
+        `No branches found in current repo; cannot initialize Charcoal.`,
+        `Please create your first commit and then re-run your Charcoal command.`,
       ].join('\n')
     );
   }
@@ -96,9 +96,9 @@ function findCommonlyNamedTrunk(context: TContext): string | undefined {
 async function branchOnboardingFlow(context: TContext) {
   context.splog.tip(
     [
-      "If you have an existing branch or stack that you'd like to start working on with Graphite, you can begin tracking it now!",
-      'To add other non-Graphite branches to Graphite later, check out `gt branch track`.',
-      'If you only want to use Graphite for new branches, feel free to exit now and use `gt branch create`.',
+      "If you have an existing branch or stack that you'd like to start working on with Charcoal, you can begin tracking it now!",
+      'To add other non-Charcoal branches to Charcoal later, check out `gt branch track`.',
+      'If you only want to use Charcoal for new branches, feel free to exit now and use `gt branch create`.',
     ].join('\n')
   );
   if (

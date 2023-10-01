@@ -31,8 +31,8 @@ export const command = 'track [branch]';
 export const canonical = 'branch track';
 export const aliases = ['tr'];
 export const description = [
-  'Start tracking the current (or provided) branch with Graphite by selecting its parent.',
-  'This command can also be used to fix corrupted Graphite metadata.',
+  'Start tracking the current (or provided) branch with Charcoal by selecting its parent.',
+  'This command can also be used to fix corrupted Charcoal metadata.',
 ].join(' ');
 export const builder = args;
 export const handler = async (argv: argsT): Promise<void> =>

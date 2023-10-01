@@ -14,7 +14,7 @@ type argsT = yargs.Arguments<yargs.InferredOptionTypes<typeof args>>;
 
 export const command = 'auth';
 export const description =
-  'Authenticate with the GitHub CLI to create and manage PRs in GitHub from the Graphite CLI.';
+  'Authenticate with the GitHub CLI to create and manage PRs in GitHub from Charcoal.';
 export const builder = args;
 export const canonical = 'auth';
 
@@ -39,7 +39,7 @@ export const handler = async (argv: argsT): Promise<void> => {
     }
 
     context.splog.message(
-      '❌ Graphite is not authenticated with GitHub. Please authenticate.'
+      '❌ Charcoal is not authenticated with GitHub. Please authenticate.'
     );
 
     try {
@@ -48,11 +48,11 @@ export const handler = async (argv: argsT): Promise<void> => {
       });
 
       context.splog.message(
-        '✅ Successfully authenticated Graphite with GitHub.'
+        '✅ Successfully authenticated Charcoal with GitHub.'
       );
     } catch {
       context.splog.message(
-        '❌ Failed to authenticate Graphite with GitHub. Please try again.'
+        '❌ Failed to authenticate Charcoal with GitHub. Please try again.'
       );
     }
   });

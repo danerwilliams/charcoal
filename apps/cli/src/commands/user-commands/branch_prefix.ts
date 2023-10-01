@@ -25,7 +25,7 @@ type argsT = yargs.Arguments<yargs.InferredOptionTypes<typeof args>>;
 export const command = 'branch-prefix';
 export const canonical = 'user branch-prefix';
 export const description =
-  'The prefix which Graphite will prepend to generated branch names.';
+  'The prefix which Charcoal will prepend to generated branch names.';
 export const builder = args;
 export const handler = async (argv: argsT): Promise<void> => {
   return graphiteWithoutRepo(argv, canonical, async (context) => {

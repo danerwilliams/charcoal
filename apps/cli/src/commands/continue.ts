@@ -18,7 +18,7 @@ export const command = 'continue';
 export const canonical = 'continue';
 export const aliases = ['cont'];
 export const description =
-  'Continues the most recent Graphite command halted by a merge conflict.';
+  'Continues the most recent Charcoal command halted by a merge conflict.';
 export const builder = args;
 export const handler = async (argv: argsT): Promise<void> =>
   graphite(

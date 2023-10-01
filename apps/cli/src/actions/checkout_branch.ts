@@ -36,7 +36,7 @@ function printBranchInfo(branchName: string, context: TContext) {
     !context.engine.isTrunk(branchName) &&
     !context.engine.isBranchTracked(branchName)
   ) {
-    context.splog.info(`This branch is not tracked by Graphite.`);
+    context.splog.info(`This branch is not tracked by Charcoal.`);
   } else if (!context.engine.isBranchFixed(branchName)) {
     context.splog.info(
       `This branch has fallen behind ${chalk.blueBright(

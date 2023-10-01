@@ -5,7 +5,7 @@ import { graphiteWithoutRepo } from '../../lib/runner';
 const args = {} as const;
 
 export const command = '*';
-export const description = 'Opens your Graphite dashboard in the web.';
+export const description = 'Opens your Charcoal dashboard in the web.';
 export const builder = args;
 export const canonical = 'dash';
 export const aliases = ['d'];

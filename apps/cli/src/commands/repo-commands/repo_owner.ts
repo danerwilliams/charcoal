@@ -7,7 +7,7 @@ const args = {
     type: 'string',
     alias: 's',
     describe:
-      "Override the value of the repo owner's name in the Graphite config. This is expected to match the name of the repo owner on GitHub and should only be set in cases where Graphite is incorrectly inferring the repo owner's name.",
+      "Override the value of the repo owner's name in the Charcoal config. This is expected to match the name of the repo owner on GitHub and should only be set in cases where Charcoal is incorrectly inferring the repo owner's name.",
   },
 } as const;
 
@@ -16,7 +16,7 @@ type argsT = yargs.Arguments<yargs.InferredOptionTypes<typeof args>>;
 export const command = 'owner';
 export const canonical = 'repo owner';
 export const description =
-  "The current repo owner's name stored in Graphite. e.g. in 'withgraphite/graphite-cli', this is 'withgraphite'.";
+  "The current repo owner's name stored in Charcoal. e.g. in 'danerwilliams/charcoal', this is 'charcoal'.";
 export const builder = args;
 export const handler = async (argv: argsT): Promise<void> => {
   return graphite(argv, canonical, async (context) => {
