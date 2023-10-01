@@ -7,8 +7,8 @@
   "homepage": "https://github.com/danerwilliams/charcoal",
   "repository": "github:danerwilliams/charcoal",
   "dependencies": {
+    "@danerwilliams/gti-cli-shared-types": "workspace:*",
     "@withgraphite/graphite-cli-routes": "^0.31.0",
-    "@withgraphite/gti-cli-shared-types": "workspace:*",
     "@withgraphite/retype": "^0.3.11",
     "@withgraphite/retyped-routes": "^0.3.1",
     "chalk": "^4.1.2",
