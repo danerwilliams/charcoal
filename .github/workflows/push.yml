@@ -58,17 +58,21 @@ jobs:
     name: Upload executable binaries
     strategy:
       matrix:
-        os: [windows, macos, ubuntu]
+        os: [macos, ubuntu]
+        arch: [arm64, x86]
         include:
-          - os: windows
-            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-win -o "gt-win-${{ github.sha }}" --debug
-            artifact-name: gt-win-${{ github.sha }}.exe
-            artifact-path: apps\cli\gt-win-${{ github.sha }}.exe
           - os: macos
-            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos -o "gt-macos-${{ github.sha }}"
-            artifact-name: gt-macos-${{ github.sha }}
-            artifact-path: apps/cli/gt-macos-${{ github.sha }}
+            arch: arm64
+            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos-arm64 -o "gt-macos-arm64-${{ github.sha }}"
+            artifact-name: gt-macos-arm64-${{ github.sha }}
+            artifact-path: apps/cli/gt-macos-arm64-${{ github.sha }}
+          - os: macos
+            arch: x86
+            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos-x86 -o "gt-macos-x86-${{ github.sha }}"
+            artifact-name: gt-macos-x86-${{ github.sha }}
+            artifact-path: apps/cli/gt-macos-x86-${{ github.sha }}
           - os: ubuntu
+            arch: x86
             build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-linux -o "gt-linux-${{ github.sha }}"
             artifact-name: gt-linux-${{ github.sha }}
             artifact-path: apps/cli/gt-linux-${{ github.sha }}
