@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npm uninstall --location=global @withgraphite/graphite-cli
+npm uninstall --location=global @danerwilliams/charcoal

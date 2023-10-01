@@ -33,7 +33,7 @@ jobs:
       - name: Git Version
         run: git --version
       - name: Test
-        run: yarn workspace @withgraphite/graphite-cli run test
+        run: yarn workspace @danerwilliams/charcoal run test
 
   superlinter:
     name: 'Run superlinter'
@@ -63,17 +63,17 @@ jobs:
         include:
           - os: macos
             arch: arm64
-            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos-arm64 -o "gt-macos-arm64-${{ github.sha }}"
+            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-macos-arm64 -o "gt-macos-arm64-${{ github.sha }}"
             artifact-name: gt-macos-arm64-${{ github.sha }}
             artifact-path: apps/cli/gt-macos-arm64-${{ github.sha }}
           - os: macos
             arch: x86
-            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos-x86 -o "gt-macos-x86-${{ github.sha }}"
+            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-macos-x86 -o "gt-macos-x86-${{ github.sha }}"
             artifact-name: gt-macos-x86-${{ github.sha }}
             artifact-path: apps/cli/gt-macos-x86-${{ github.sha }}
           - os: ubuntu
             arch: x86
-            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-linux -o "gt-linux-${{ github.sha }}"
+            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-linux -o "gt-linux-${{ github.sha }}"
             artifact-name: gt-linux-${{ github.sha }}
             artifact-path: apps/cli/gt-linux-${{ github.sha }}
     runs-on: ${{ matrix.os }}-latest

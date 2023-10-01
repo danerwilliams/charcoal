@@ -1,5 +1,5 @@
 {
-  "name": "@withgraphite/gti-cli-shared-types",
+  "name": "@danerwilliams/gti-cli-shared-types",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "version": "0.3.2",

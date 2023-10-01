@@ -1,11 +1,11 @@
 {
-  "name": "@withgraphite/graphite-cli",
+  "name": "@danerwilliams/charcoal",
   "version": "0.1.0",
   "license": "None",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
-  "homepage": "https://github.com/withgraphite/graphite-cli",
-  "repository": "github:withgraphite/graphite-cli",
+  "homepage": "https://github.com/danerwilliams/charcoal",
+  "repository": "github:danerwilliams/charcoal",
   "dependencies": {
     "@withgraphite/graphite-cli-routes": "^0.31.0",
     "@withgraphite/gti-cli-shared-types": "workspace:*",
@@ -29,7 +29,6 @@
     ],
     "targets": [
       "node16-macos",
-      "node16-win",
       "node16-linux"
     ],
     "outputPath": "pkg"

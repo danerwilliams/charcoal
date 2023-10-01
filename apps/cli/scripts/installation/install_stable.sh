@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npm i -g @withgraphite/graphite-cli
+npm i -g @danerwilliams/charcoal

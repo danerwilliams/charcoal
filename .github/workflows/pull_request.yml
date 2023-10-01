@@ -23,7 +23,7 @@ jobs:
       - name: Install
         run: yarn install --immutable
       - name: Lint
-        run: yarn workspace @withgraphite/graphite-cli run lint
+        run: yarn workspace @danerwilliams/charcoal run lint
       - name: Build
         run: yarn turbo run build
       - name: Setup git
@@ -31,7 +31,7 @@ jobs:
       - name: Git Version
         run: git --version
       - name: Test
-        run: yarn workspace @withgraphite/graphite-cli run test-ci
+        run: yarn workspace @danerwilliams/charcoal run test-ci
 
   superlinter:
     name: 'Run superlinter'
