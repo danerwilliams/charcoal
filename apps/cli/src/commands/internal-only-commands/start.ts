@@ -1,7 +1,3 @@
-import yargs from 'yargs';
-import { graphite } from '../../lib/runner';
-import { DEFAULT_PORT, runProxyMain } from '@withgraphite/gti-server';
-
 const args = {
   foreground: {
     type: 'boolean',
@@ -14,12 +10,6 @@ const args = {
     describe: 'Do not try to open a browser after starting the server.',
     default: false,
   },
-  port: {
-    type: 'number',
-    alias: 'p',
-    describe: `Port to listen on (default: ${DEFAULT_PORT})`,
-    default: parseInt(DEFAULT_PORT, 10),
-  },
   json: {
     type: 'boolean',
     describe: 'Output machine-readable JSON',
@@ -28,12 +18,6 @@ const args = {
   stdout: {
     type: 'boolean',
     describe: 'Write server logs to stdout instead of a tmp file.',
-    default: false,
-  },
-  isDevMode: {
-    alias: 'dev',
-    type: 'boolean',
-    describe: `Open on port 3000 despite hosting ${DEFAULT_PORT} (or custom port with -p). This is useless unless running from source to hook into CRA dev mode.`,
     default: false,
   },
   kill: {
@@ -75,10 +59,3 @@ export const command = 'start';
 export const canonical = 'internal-only start';
 export const description = 'Start GT Interactive';
 export const builder = args;
-
-type argsT = yargs.Arguments<yargs.InferredOptionTypes<typeof args>>;
-export const handler = async (argv: argsT): Promise<void> => {
-  return graphite(argv, canonical, async () => {
-    void runProxyMain({ ...argv, help: false, openUrl: !argv['no-open'] });
-  });
-};

@@ -1,8 +1,0 @@
-{
-  "watch": [
-    "src",
-    "proxy"
-  ],
-  "ext": "ts",
-  "exec": "yarn build && yarn serve --stdout --foreground --dev"
-}
