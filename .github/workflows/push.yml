@@ -102,27 +102,27 @@ jobs:
     needs: [lint_and_fast_tests, create-binaries]
     runs-on: ubuntu-latest
     steps:
-      - name: Download windows
+      - name: Download mac ARM
         uses: actions/download-artifact@v3
         with:
-          name: gt-win-${{ github.sha }}.exe
-      - name: Download mac
+          name: gt-macos-arm64-${{ github.sha }}
+      - name: Download mac x86
         uses: actions/download-artifact@v3
         with:
-          name: gt-macos-${{ github.sha }}
+          name: gt-macos-x86-${{ github.sha }}
       - name: Download linux
         uses: actions/download-artifact@v3
         with:
           name: gt-linux-${{ github.sha }}
       - name: Rename files
         run: |
-          mv gt-win-${{ github.sha }}.exe gt-win.exe;
-          mv gt-macos-${{ github.sha }} gt-macos;
+          mv gt-macos-arm64-${{ github.sha }} gt-macos;
+          mv gt-macos-x86-${{ github.sha }} gt-macos;
           mv gt-linux-${{ github.sha }} gt-linux
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "gt-win.exe,gt-macos,gt-linux"
+          artifacts: "gt-macos-arm64,gt-macos-x86,gt-linux"
           draft: false
           prerelease: true
           allowUpdates: true
