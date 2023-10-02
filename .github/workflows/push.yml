@@ -58,14 +58,13 @@ jobs:
     name: Upload executable binaries
     strategy:
       matrix:
+        os: [macos, ubuntu]
         include:
           - os: macos
-            arch: x86
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-macos-x86 -o "gt-macos-x86-${{ github.sha }}"
+            build: yarn workspace @withgraphite/graphite-cli run build-pkg -t node16-macos -o "gt-macos-x6-${{ github.sha }}"
             artifact-name: gt-macos-x86-${{ github.sha }}
             artifact-path: apps/cli/gt-macos-x86-${{ github.sha }}
           - os: ubuntu
-            arch: x86
             build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-linux -o "gt-linux-${{ github.sha }}"
             artifact-name: gt-linux-${{ github.sha }}
             artifact-path: apps/cli/gt-linux-${{ github.sha }}
