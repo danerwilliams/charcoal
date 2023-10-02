@@ -58,8 +58,6 @@ jobs:
     name: Upload executable binaries
     strategy:
       matrix:
-        os: [macos, ubuntu]
-        arch: [arm64, x86]
         include:
           - os: macos
             arch: arm64
