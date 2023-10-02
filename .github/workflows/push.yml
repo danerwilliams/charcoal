@@ -60,11 +60,6 @@ jobs:
       matrix:
         include:
           - os: macos
-            arch: arm64
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-macos-arm64 -o "gt-macos-arm64-${{ github.sha }}"
-            artifact-name: gt-macos-arm64-${{ github.sha }}
-            artifact-path: apps/cli/gt-macos-arm64-${{ github.sha }}
-          - os: macos
             arch: x86
             build: yarn workspace @danerwilliams/charcoal run build-pkg -t node16-macos-x86 -o "gt-macos-x86-${{ github.sha }}"
             artifact-name: gt-macos-x86-${{ github.sha }}
@@ -100,10 +95,6 @@ jobs:
     needs: [lint_and_fast_tests, create-binaries]
     runs-on: ubuntu-latest
     steps:
-      - name: Download mac ARM
-        uses: actions/download-artifact@v3
-        with:
-          name: gt-macos-arm64-${{ github.sha }}
       - name: Download mac x86
         uses: actions/download-artifact@v3
         with:
@@ -114,13 +105,12 @@ jobs:
           name: gt-linux-${{ github.sha }}
       - name: Rename files
         run: |
-          mv gt-macos-arm64-${{ github.sha }} gt-macos;
           mv gt-macos-x86-${{ github.sha }} gt-macos;
           mv gt-linux-${{ github.sha }} gt-linux
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "gt-macos-arm64,gt-macos-x86,gt-linux"
+          artifacts: "gt-macos-x86,gt-linux"
           draft: false
           prerelease: true
           allowUpdates: true
