@@ -156,6 +156,13 @@ export async function submitAction(
     chalk.blueBright('\n🌳 Updating dependency trees in PR bodies...')
   );
 
+  // eslint-disable-next-line no-console
+  console.log({ submissionInfos });
+  // eslint-disable-next-line no-console
+  console.log({ alreadyUpdatedBranches });
+  // eslint-disable-next-line no-console
+  console.log({ branchesToUpdateBodyFooter });
+
   for (const branch of branchesToUpdateBodyFooter) {
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
