@@ -180,6 +180,12 @@ export async function submitAction(
         }'
       `
       );
+
+      context.splog.info(
+        `${chalk.green(branch)}: ${prInfo.url} (${
+          prFooterChanged ? chalk.yellow('Updated') : 'No-op'
+        })`
+      );
     }
   }
 
