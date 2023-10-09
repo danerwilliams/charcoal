@@ -43,7 +43,18 @@ function buildBranchTree({
   for (const branch of currentBranches) {
     // eslint-disable-next-line no-console
     console.log({ branch });
-    if (branch !== prBranch && !isParentOfBranch(context, branch, prBranch)) {
+    if (
+      branch !== prBranch &&
+      !(
+        // If we aren't on the last branch,
+        // then we should print it if the pr branch is either a parent or child
+        // of the current branch being looked at in our recursive algorithm
+        (
+          isParentOfBranch(context, branch, prBranch) ||
+          isParentOfBranch(context, prBranch, branch)
+        )
+      )
+    ) {
       // eslint-disable-next-line no-console
       console.log(`skipping ${branch}, ${prBranch} is not a child`);
       continue;
