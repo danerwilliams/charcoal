@@ -11,9 +11,6 @@ export function createPrBodyFooter(
 ): string {
   const terminalParent = findTerminalParent(context, branch);
 
-  // eslint-disable-next-line no-console
-  console.log({ terminalParent });
-
   const tree = buildBranchTree({
     context,
     currentBranches: [terminalParent],
@@ -41,8 +38,6 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    // eslint-disable-next-line no-console
-    console.log({ branch });
     if (
       branch !== prBranch &&
       !(
@@ -55,8 +50,6 @@ function buildBranchTree({
         )
       )
     ) {
-      // eslint-disable-next-line no-console
-      console.log(`skipping ${branch}, ${prBranch} is not a child`);
       continue;
     }
 
@@ -69,9 +62,6 @@ function buildBranchTree({
     })}`;
 
     const children = context.engine.getChildren(branch);
-
-    // eslint-disable-next-line no-console
-    console.log({ children });
 
     if (children.length) {
       tree += `${buildBranchTree({
