@@ -45,7 +45,7 @@ function buildBranchTree({
     console.log({ branch });
     if (branch !== prBranch && !isParentOfBranch(context, branch, prBranch)) {
       // eslint-disable-next-line no-console
-      console.log(`skipping ${branch}`);
+      console.log(`skipping ${branch}, ${prBranch} is not a child`);
       continue;
     }
 
