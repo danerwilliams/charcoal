@@ -11,6 +11,9 @@ export function createPrBodyFooter(
 ): string {
   const terminalParent = findTerminalParent(context, branch);
 
+  // eslint-disable-next-line no-console
+  console.log({ terminalParent });
+
   const tree = buildBranchTree({
     context,
     currentBranches: [terminalParent],
@@ -51,6 +54,9 @@ function buildBranchTree({
     })}`;
 
     const children = context.engine.getChildren(branch);
+
+    // eslint-disable-next-line no-console
+    console.log({ children });
 
     if (children.length) {
       tree += `${buildBranchTree({
