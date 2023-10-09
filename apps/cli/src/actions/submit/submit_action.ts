@@ -167,6 +167,9 @@ export async function submitAction(
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
 
+    // eslint-disable-next-line no-console
+    console.log({ footer });
+
     if (!prInfo) {
       throw new Error(`PR info is undefined for branch ${branch}`);
     }
