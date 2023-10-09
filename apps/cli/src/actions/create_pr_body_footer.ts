@@ -11,6 +11,9 @@ export function createPrBodyFooter(
 ): string {
   const terminalParent = findTerminalParent(context, branch);
 
+  // eslint-disable-next-line no-console
+  console.log({ terminalParent });
+
   const tree = buildBranchTree({
     context,
     currentBranches: [terminalParent],
@@ -38,7 +41,22 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
-    if (branch !== prBranch && !isParentOfBranch(context, branch, prBranch)) {
+    // eslint-disable-next-line no-console
+    console.log({ branch });
+    if (
+      branch !== prBranch &&
+      !(
+        // If we aren't on the last branch,
+        // then we should print it if the pr branch is either a parent or child
+        // of the current branch being looked at in our recursive algorithm
+        (
+          isParentOfBranch(context, branch, prBranch) ||
+          isParentOfBranch(context, prBranch, branch)
+        )
+      )
+    ) {
+      // eslint-disable-next-line no-console
+      console.log(`skipping ${branch}, ${prBranch} is not a child`);
       continue;
     }
 
@@ -51,6 +69,9 @@ function buildBranchTree({
     })}`;
 
     const children = context.engine.getChildren(branch);
+
+    // eslint-disable-next-line no-console
+    console.log({ children });
 
     if (children.length) {
       tree += `${buildBranchTree({

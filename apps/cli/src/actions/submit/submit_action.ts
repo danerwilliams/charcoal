@@ -167,11 +167,24 @@ export async function submitAction(
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
 
+    // eslint-disable-next-line no-console
+    console.log({ footer });
+
     if (!prInfo) {
       throw new Error(`PR info is undefined for branch ${branch}`);
     }
 
     const prFooterChanged = !prInfo.body?.includes(footer);
+
+    // eslint-disable-next-line no-console
+    console.log({ body: prInfo.body });
+    // eslint-disable-next-line no-console
+    console.log({
+      replaced: prInfo.body?.replace(
+        new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+        '' // instead of just replacing with footer we handle the case where there is no existing footer
+      ),
+    });
 
     if (prFooterChanged) {
       execSync(
