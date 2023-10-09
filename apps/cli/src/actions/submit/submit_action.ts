@@ -177,7 +177,14 @@ export async function submitAction(
     const prFooterChanged = !prInfo.body?.includes(footer);
 
     // eslint-disable-next-line no-console
-    console.log({ prFooterChanged });
+    console.log({ body: prInfo.body });
+    // eslint-disable-next-line no-console
+    console.log({
+      replaced: prInfo.body?.replace(
+        new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+        '' // instead of just replacing with footer we handle the case where there is no existing footer
+      ),
+    });
 
     if (prFooterChanged) {
       execSync(
