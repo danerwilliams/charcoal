@@ -170,7 +170,11 @@ export async function submitAction(
       execSync(
         `gh pr edit ${prInfo.number} --body '${
           prInfo.body?.replace(
-            new RegExp(footerTitle + '.*?' + footerFooter, 's'),
+            new RegExp(
+              footerTitle +
+                '[\\s\\S]*' +
+                footerFooter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // footerFooter contains special regex characters that must be escaped
+            ),
             '' // instead of just replacing with footer we handle the case where there is no existing footer
           ) + footer
         }'
