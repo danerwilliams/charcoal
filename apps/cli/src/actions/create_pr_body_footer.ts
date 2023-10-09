@@ -41,7 +41,11 @@ function buildBranchTree({
   let tree = '';
 
   for (const branch of currentBranches) {
+    // eslint-disable-next-line no-console
+    console.log({ branch });
     if (branch !== prBranch && !isParentOfBranch(context, branch, prBranch)) {
+      // eslint-disable-next-line no-console
+      console.log(`skipping ${branch}`);
       continue;
     }
 
