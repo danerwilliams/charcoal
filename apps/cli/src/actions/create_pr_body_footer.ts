@@ -95,6 +95,8 @@ function buildLeaf({
   // If the PR is being created for the first time, it hasn't been assigned a number yet.
   // We allow for passing the number to do an update to the body after PR creation to handle that case.
   // The PR hasn't been persisted by the context.engine yet, so we manually pass it as a parameter to this method
+  // eslint-disable-next-line no-console
+  console.log({ prBranch, branch, prInfoNumber: prInfo?.number, prNumber });
   const number = prInfo?.number ?? prNumber;
 
   if (!number) {
