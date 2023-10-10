@@ -46,12 +46,14 @@ function buildBranchTree({
       continue;
     }
 
-    tree += `\n${buildLeaf({
+    const leaf = buildLeaf({
       context,
       branch,
       depth: currentDepth,
       prBranch,
-    })}`;
+    });
+
+    tree += leaf || '';
 
     const children = context.engine.getChildren(branch);
 
@@ -78,16 +80,16 @@ function buildLeaf({
   branch: string;
   depth: number;
   prBranch: string;
-}): string {
+}): string | undefined {
   const prInfo = context.engine.getPrInfo(branch);
 
   const number = prInfo?.number;
 
   if (!number) {
-    throw new Error('PR number is undefined');
+    return;
   }
 
-  return `${'  '.repeat(depth)}* **PR #${number}**${
+  return `\n${'  '.repeat(depth)}* **PR #${number}**${
     branch === prBranch ? ' 👈' : ''
   }`;
 }

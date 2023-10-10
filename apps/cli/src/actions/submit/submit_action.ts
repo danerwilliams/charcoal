@@ -149,6 +149,9 @@ export async function submitAction(
   );
 
   for (const branch of branchNames) {
+    // eslint-disable-next-line no-console
+    console.log({ branch });
+
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
 
