@@ -144,19 +144,11 @@ export async function submitAction(
     );
   }
 
-  const alreadyUpdatedBranches = new Set(
-    submissionInfos.map((submissionInfo) => submissionInfo.head)
-  );
-
-  const branchesToUpdateBodyFooter = branchNames.filter(
-    (branchName) => !alreadyUpdatedBranches.has(branchName)
-  );
-
   context.splog.info(
     chalk.blueBright('\n🌳 Updating dependency trees in PR bodies...')
   );
 
-  for (const branch of branchesToUpdateBodyFooter) {
+  for (const branch of branchNames) {
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
 

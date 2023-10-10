@@ -5,11 +5,6 @@ import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
 import { execSync } from 'child_process';
-import {
-  createPrBodyFooter,
-  footerFooter,
-  footerTitle,
-} from '../create_pr_body_footer';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -36,7 +31,6 @@ export async function submitPullRequest(
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
     submissionInfo: args.submissionInfo,
-    context,
   });
 
   if (pr.response.status === 'error') {
@@ -69,17 +63,14 @@ export async function submitPullRequest(
 
 async function requestServerToSubmitPR({
   submissionInfo,
-  context,
 }: {
   submissionInfo: TPRSubmissionInfo;
-  context: TContext;
 }): Promise<TSubmittedPR> {
   const request = submissionInfo[0];
 
   try {
     const response = await submitPrToGithub({
       request,
-      context,
     });
 
     return {
@@ -100,10 +91,8 @@ async function requestServerToSubmitPR({
 
 async function submitPrToGithub({
   request,
-  context,
 }: {
   request: TSubmittedPRRequest;
-  context: TContext;
 }): Promise<TSubmittedPRResponse> {
   try {
     const prInfo = await JSON.parse(
@@ -118,31 +107,10 @@ async function submitPrToGithub({
       );
     }
 
-    const footer = createPrBodyFooter(context, request.head);
-
     const prBaseChanged = prInfo.baseRefName !== request.base;
-    const prFooterChanged = !prInfo.body.includes(footer);
 
-    if (prBaseChanged || prFooterChanged) {
-      execSync(
-        `gh pr edit ${prInfo.headRefName} ${
-          prBaseChanged ? `--base ${request.base}` : ''
-        } ${
-          prFooterChanged
-            ? `--body '${
-                prInfo.body.replace(
-                  new RegExp(
-                    footerTitle +
-                      '[\\s\\S]*' +
-                      footerFooter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // footerFooter contains special regex characters that must be escaped
-                  ),
-                  '' // instead of just replacing with footer we handle the case where there is no existing footer
-                ) + footer
-              }'`
-            : ''
-        }
-      `
-      );
+    if (prBaseChanged) {
+      execSync(`gh pr edit ${prInfo.headRefName} --base ${request.base}`);
     }
 
     return {
@@ -167,9 +135,6 @@ async function submitPrToGithub({
         .trim();
 
       const prNumber = getPrNumberFromUrl(result);
-
-      const footer = createPrBodyFooter(context, request.head, prNumber);
-      execSync(`gh pr edit ${prNumber} --body '${request.body + footer}'`);
 
       return {
         head: request.head,
