@@ -160,16 +160,10 @@ export async function submitAction(
 
     if (prFooterChanged) {
       execSync(
-        `gh pr edit ${prInfo.number} --body '${
-          prInfo.body?.replace(
-            new RegExp(
-              footerTitle +
-                '[\\s\\S]*' +
-                footerFooter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // footerFooter contains special regex characters that must be escaped
-            ),
-            '' // instead of just replacing with footer we handle the case where there is no existing footer
-          ) + footer
-        }'
+        `gh pr edit ${prInfo.number} --body '${updatePrBodyFooter(
+          prInfo.body,
+          footer
+        )}'
       `
       );
 
@@ -184,6 +178,26 @@ export async function submitAction(
   if (!context.interactive) {
     return;
   }
+}
+
+export function updatePrBodyFooter(
+  body: string | undefined,
+  footer: string
+): string {
+  if (!body) {
+    return footer;
+  }
+
+  const regex = new RegExp(
+    `${footerTitle}[\\s\\S]*${footerFooter.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&'
+    )}`
+  );
+
+  const updatedBody = body.replace(regex, footer);
+
+  return updatedBody;
 }
 
 async function selectBranches(
