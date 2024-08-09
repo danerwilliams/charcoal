@@ -11,7 +11,7 @@ import {
   footerFooter,
   footerTitle,
 } from '../create_pr_body_footer';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 // eslint-disable-next-line max-lines-per-function
 export async function submitAction(
@@ -159,13 +159,13 @@ export async function submitAction(
     const prFooterChanged = !prInfo.body?.includes(footer);
 
     if (prFooterChanged) {
-      execSync(
-        `gh pr edit ${prInfo.number} --body '${updatePrBodyFooter(
-          prInfo.body,
-          footer
-        )}'
-      `
-      );
+      execFileSync('gh', [
+        'pr',
+        'edit',
+        `${prInfo.number}`,
+        '--body',
+        updatePrBodyFooter(prInfo.body, footer),
+      ]);
 
       context.splog.info(
         `${chalk.green(branch)}: ${prInfo.url} (${
