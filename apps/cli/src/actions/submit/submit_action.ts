@@ -28,7 +28,6 @@ export async function submitAction(
     select: boolean;
     always: boolean;
     branch: string | undefined;
-    mergeWhenReady: boolean;
   },
   context: TContext
 ): Promise<void> {
@@ -137,8 +136,6 @@ export async function submitAction(
     await submitPullRequest(
       {
         submissionInfo: [submissionInfo],
-        mergeWhenReady: args.mergeWhenReady,
-        trunkBranchName: context.engine.trunk,
       },
       context
     );

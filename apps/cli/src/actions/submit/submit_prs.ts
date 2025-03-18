@@ -24,8 +24,6 @@ type TSubmittedPR = {
 export async function submitPullRequest(
   args: {
     submissionInfo: TPRSubmissionInfo;
-    mergeWhenReady: boolean;
-    trunkBranchName: string;
   },
   context: TContext
 ): Promise<void> {

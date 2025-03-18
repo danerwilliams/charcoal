@@ -98,13 +98,6 @@ export const args = {
     describe: 'Which branch to run this command from (default: current branch)',
     type: 'string',
   },
-  'merge-when-ready': {
-    describe:
-      'If set, marks the PRs are merge when ready, which will let them automatically merge as soon as all merge requirements are met.',
-    type: 'boolean',
-    default: false,
-    alias: 'm',
-  },
 } as const;
 
 export const builder = args;
