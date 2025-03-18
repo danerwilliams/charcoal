@@ -150,12 +150,6 @@ export async function submitAction(
 
     const prFooterChanged = !prInfo.body?.includes(footer);
 
-    console.log({ prFooterChanged }); // eslint-disable-line no-console
-    // eslint-disable-next-line no-console
-    console.log({
-      newBody: updatePrBodyFooter(prInfo.body, footer),
-    });
-
     if (prFooterChanged) {
       execFileSync('gh', [
         'pr',
