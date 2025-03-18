@@ -133,12 +133,7 @@ export async function submitAction(
       throw err;
     }
 
-    await submitPullRequest(
-      {
-        submissionInfo: [submissionInfo],
-      },
-      context
-    );
+    await submitPullRequest([submissionInfo], context);
   }
 
   context.splog.info(

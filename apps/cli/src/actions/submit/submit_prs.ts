@@ -22,13 +22,11 @@ type TSubmittedPR = {
 };
 
 export async function submitPullRequest(
-  args: {
-    submissionInfo: TPRSubmissionInfo;
-  },
+  submissionInfo: TPRSubmissionInfo,
   context: TContext
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
-    submissionInfo: args.submissionInfo,
+    submissionInfo,
   });
 
   if (pr.response.status === 'error') {
