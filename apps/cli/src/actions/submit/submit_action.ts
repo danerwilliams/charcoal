@@ -150,6 +150,10 @@ export async function submitAction(
 
     const prFooterChanged = !prInfo.body?.includes(footer);
 
+    context.splog.info('testing testing');
+
+    console.log({ prFooterChanged }); // eslint-disable-line no-console
+
     if (prFooterChanged) {
       execFileSync('gh', [
         'pr',
