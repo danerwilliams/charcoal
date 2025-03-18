@@ -186,16 +186,18 @@ export function updatePrBodyFooter(
     return footer;
   }
 
-  const regex = new RegExp(
+  const matchExistingFooter = new RegExp(
     `${footerTitle}[\\s\\S]*${footerFooter.replace(
       /[.*+?^${}()|[\]\\]/g,
       '\\$&'
     )}`
   );
 
-  const updatedBody = body.replace(regex, footer);
+  if (body.match(matchExistingFooter)) {
+    return body.replace(matchExistingFooter, footer);
+  }
 
-  return updatedBody;
+  return body + footer;
 }
 
 async function selectBranches(
