@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@withgraphite/graphite-cli-routes';
 
 import t from '@withgraphite/retype';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 type TBranchNameWithPrNumber = {
   branchName: string;
@@ -37,9 +37,13 @@ export async function getPrInfoForBranches(
     for (const prId of [...existingPrInfo.keys(), ...branchesWithoutPrInfo]) {
       try {
         const pr = await JSON.parse(
-          execSync(
-            `gh pr view ${prId} --json state,url,title,body,number,headRefName,baseRefName,reviewDecision,isDraft`
-          ).toString()
+          execFileSync('gh', [
+            'pr',
+            'view',
+            `${prId}`,
+            '--json',
+            'state,url,title,body,number,headRefName,baseRefName,reviewDecision,isDraft',
+          ]).toString()
         );
 
         pr.prNumber = pr.number;

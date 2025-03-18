@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import { graphiteWithoutRepo } from '../lib/runner';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 const args = {
   token: {
@@ -43,7 +43,7 @@ export const handler = async (argv: argsT): Promise<void> => {
     );
 
     try {
-      execSync('gh auth login', {
+      execFileSync('gh', ['auth', 'login'], {
         stdio: 'inherit',
       });
 
@@ -60,7 +60,7 @@ export const handler = async (argv: argsT): Promise<void> => {
 
 const getGhVersion = (): string | null => {
   try {
-    const output = execSync('gh --version').toString();
+    const output = execFileSync('gh', ['--version']).toString();
     const match = output.match(/gh version (\d+\.\d+\.\d+)/);
     return match ? match[1] : null;
   } catch (error) {
@@ -70,7 +70,7 @@ const getGhVersion = (): string | null => {
 
 export const getGithubAuthorizationStatus = (): boolean => {
   try {
-    execSync('gh auth status', { stdio: 'ignore' });
+    execFileSync('gh', ['auth', 'status'], { stdio: 'ignore' });
     return true;
   } catch {
     return false;

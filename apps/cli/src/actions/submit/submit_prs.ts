@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -92,9 +92,13 @@ async function submitPrToGithub({
 }): Promise<TSubmittedPRResponse> {
   try {
     const prInfo = await JSON.parse(
-      execSync(
-        `gh pr view ${request.head} --json headRefName,url,number,baseRefName,body`
-      ).toString()
+      execFileSync('gh', [
+        'pr',
+        'view',
+        request.head,
+        '--json',
+        'headRefName,url,number,baseRefName,body',
+      ]).toString()
     );
 
     if (prInfo.headRefName !== request.head) {
@@ -106,7 +110,13 @@ async function submitPrToGithub({
     const prBaseChanged = prInfo.baseRefName !== request.base;
 
     if (prBaseChanged) {
-      execSync(`gh pr edit ${prInfo.headRefName} --base ${request.base}`);
+      execFileSync('gh', [
+        'pr',
+        'edit',
+        prInfo.headRefName,
+        '--base',
+        request.base,
+      ]);
     }
 
     return {
@@ -120,13 +130,19 @@ async function submitPrToGithub({
       error instanceof Error &&
       error.message.includes('no pull requests found')
     ) {
-      const result = execSync(
-        `gh pr create --head '${request.head}' \
-                    --base '${request.base}' \
-                    --title '${request.title}' \
-                    --body '${request.body}' \
-                    ${request.draft ? '--draft' : ''}`
-      )
+      const result = execFileSync('gh', [
+        'pr',
+        'create',
+        '--head',
+        request.head,
+        '--base',
+        request.base,
+        '--title',
+        request.title ?? '',
+        '--body',
+        request.body ?? '',
+        ...(request.draft ? ['--draft'] : []),
+      ])
         .toString()
         .trim();
 
