@@ -95,11 +95,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download mac x86
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: gt-macos-x86-${{ github.sha }}
       - name: Download linux
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: gt-linux-${{ github.sha }}
       - name: Rename files
