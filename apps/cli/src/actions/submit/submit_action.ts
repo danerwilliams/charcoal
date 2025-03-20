@@ -180,15 +180,24 @@ export function updatePrBodyFooter(
     return footer;
   }
 
+  // Get the core title and footer text without extra whitespace
+  const titleText = footerTitle.trim().replace(/^\s*\n+|\n+\s*$/g, '');
+  const footerText = footerFooter.trim().replace(/^\s*\n+|\n+\s*$/g, '');
+
+  const escapedTitleText = titleText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const escapedFooterText = footerText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Match a pattern where there's the main body content, followed by the footer section
+  // The footer section starts with the title text and ends with the footer text
   const matchExistingFooter = new RegExp(
-    `${footerTitle}[\\s\\S]*${footerFooter.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      '\\$&'
-    )}`
+    `(?<body>[\\s\\S]*)(?<footer>${escapedTitleText}[\\s\\S]*?${escapedFooterText})$`,
+    's'
   );
 
-  if (body.match(matchExistingFooter)) {
-    return body.replace(matchExistingFooter, footer);
+  const match = matchExistingFooter.exec(body);
+
+  if (match?.groups?.body) {
+    return match.groups.body + footer;
   }
 
   return body + footer;
