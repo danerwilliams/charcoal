@@ -8,11 +8,15 @@
 
 `brew install danerwilliams/tap/charcoal`
 
+## Announcement
+
+Check out my blog post announcement [here](https://danewilliams.com/announcing-charcoal) 🙂
+
 ## What is Graphite?
 
 From Graphite:
 
-> [Graphite](https://graphite.dev) is a **fast, simple code review platform** designed for engineers who want to **write and review smaller pull requests, stay unblocked, and ship faster**.  Anyone can start using Graphite individually without needing their coworkers to change tools - we'll seamlessly sync your code changes and reviews.  We built Graphite because we missed internal code review tools like Phabricator (at Facebook) and Critique (Google) that help engineers create, approve, and ship small, incremental changes, and long-term we’re passionate about creating products & workflows that help fast-moving eng teams achieve more.
+> [Graphite](https://graphite.dev) is a **fast, simple code review platform** designed for engineers who want to **write and review smaller pull requests, stay unblocked, and ship faster**. Anyone can start using Graphite individually without needing their coworkers to change tools - we'll seamlessly sync your code changes and reviews. We built Graphite because we missed internal code review tools like Phabricator (at Facebook) and Critique (Google) that help engineers create, approve, and ship small, incremental changes, and long-term we’re passionate about creating products & workflows that help fast-moving eng teams achieve more.
 
 ## What is Charcoal?
 
@@ -34,71 +38,6 @@ Right now, the Graphite Docs are more or less in sync with the features availabl
 
 As Graphite continues to develop their private version of the CLI, however, these will become out of sync. Ideally we can add our own open source docs to accompany this project.
 
-## Developing and Running tests
+## Contributing
 
-Interested in contributing to Charcoal? Here's how to get started.
-
-You'll need to install yarn on your machine
-
-```
-npm install --global yarn
-```
-
-You'll also need to install turbo
-```
-npm install --global turbo
-```
-
-Build the monorepo
-```
-yarn install
-turbo run build
-```
-
-Build the CLI
-
-```
-cd apps/cli
-nvm use
-yarn install
-yarn build
-```
-
-Running tests
-
-```
-cd apps/cli
-DEBUG=1 yarn test --full-trace
-```
-
-Running a subset of tests
-
-```
-cd apps/cli
-DEBUG=1 yarn test --full-trace -g "test pattern"
-```
-
-Running one test
-
-```
-cd apps/cli
-DEBUG=1 yarn test-one "<path to .js test file in dist folder>"
-```
-
-Running the CLI locally (after build)
-
-```
-cd apps/cli
-yarn cli <command> # (to run `gt <command>`)
-```
-
-Linking `gt` to a locally built version (includes a build)
-
-```
-cd apps/cli
-yarn dev
-# then to run commands:
-gt <command>
-```
-
-Running into difficulties getting the CLI repo set up on your system? Check out [this PR](https://github.com/withgraphite/graphite-cli/pull/1066?no-redirect=1)
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
