@@ -27,8 +27,8 @@
       "dist/src/lib/gt.fish"
     ],
     "targets": [
-      "node22-macos",
-      "node22-linux"
+      "node16-macos",
+      "node16-linux"
     ],
     "outputPath": "pkg"
   },
