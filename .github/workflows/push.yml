@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint_and_fast_tests:
-    name: 'Run CLI tests'
+    name: "Run CLI tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,7 +18,7 @@ jobs:
       # Basic setup
       - uses: actions/checkout@v3
         with:
-          clean: 'false'
+          clean: "false"
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -36,7 +36,7 @@ jobs:
         run: yarn workspace @danerwilliams/charcoal run test
 
   superlinter:
-    name: 'Run superlinter'
+    name: "Run superlinter"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -83,7 +83,7 @@ jobs:
       - name: Build binary
         run: ${{ matrix.build }}
       - name: Upload binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
           path: ${{ matrix.artifact-path }}
