@@ -20,18 +20,6 @@
     "tmp": "^0.2.1",
     "yargs": "^17.5.1"
   },
-  "pkg": {
-    "scripts": "dist/src/**/*.js",
-    "assets": [
-      "dist/src/commands/**/*",
-      "dist/src/lib/gt.fish"
-    ],
-    "targets": [
-      "node18-macos",
-      "node18-linux"
-    ],
-    "outputPath": "pkg"
-  },
   "publishConfig": {
     "access": "public"
   },
@@ -41,7 +29,7 @@
     "lint": "eslint src --quiet --ext .ts --cache",
     "check": "tsc --noEmit",
     "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js && cp src/lib/gt.fish dist/src/lib/gt.fish",
-    "build-pkg": "pkg dist/src/index.js -c package.json --public-packages \"*\"",
+    "build-pkg": "node --experimental-sea dist/src/index.js --output=pkg/gt",
     "dev": "./scripts/installation/develop.sh",
     "cli": "node ./dist/src/index.js",
     "test": "tsc && yarn mocha \"dist/test/**/*.test.js\"  --parallel --jobs 8",
