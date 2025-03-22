@@ -56,37 +56,25 @@ jobs:
 
   create-binaries:
     name: Upload executable binaries
-    strategy:
-      matrix:
-        os: [macos, ubuntu]
-        include:
-          - os: macos
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node18-macos -o "gt-macos-x86-${{ github.sha }}"
-            artifact-name: gt-macos-x86-${{ github.sha }}
-            artifact-path: apps/cli/gt-macos-x86-${{ github.sha }}
-          - os: ubuntu
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node18-linux -o "gt-linux-${{ github.sha }}"
-            artifact-name: gt-linux-${{ github.sha }}
-            artifact-path: apps/cli/gt-linux-${{ github.sha }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20.14.0
       - name: Install
         run: yarn install --immutable
       - name: Build
         run: yarn turbo run build
-      - name: Build binary
-        run: ${{ matrix.build }}
-      - name: Upload binary
+      - name: Build binary (Linux)
+        run: yarn workspace @danerwilliams/charcoal run build-pkg
+      - name: Upload binary (Linux)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact-name }}
-          path: ${{ matrix.artifact-path }}
+          name: gt-linux-${{ github.sha }}
+          path: apps/cli/pkg/gt
 
   release:
     name: Release version
@@ -97,19 +85,14 @@ jobs:
       - name: Download mac x86
         uses: actions/download-artifact@v4
         with:
-          name: gt-macos-x86-${{ github.sha }}
-      - name: Download linux
-        uses: actions/download-artifact@v4
-        with:
           name: gt-linux-${{ github.sha }}
       - name: Rename files
         run: |
-          mv gt-macos-x86-${{ github.sha }} gt-macos-x86;
           mv gt-linux-${{ github.sha }} gt-linux
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "gt-macos-x86,gt-linux"
+          artifacts: "gt-linux"
           draft: false
           prerelease: true
           allowUpdates: true
