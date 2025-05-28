@@ -28,6 +28,8 @@ export async function submitAction(
     select: boolean;
     always: boolean;
     branch: string | undefined;
+    automerge: boolean;
+    browser: boolean;
   },
   context: TContext
 ): Promise<void> {
@@ -95,6 +97,8 @@ export async function submitAction(
       dryRun: args.dryRun,
       select: args.select,
       always: args.always,
+      automerge: args.automerge,
+      browser: args.browser,
     },
     context
   );
@@ -133,7 +137,10 @@ export async function submitAction(
       throw err;
     }
 
-    await submitPullRequest([submissionInfo], context);
+    await submitPullRequest([submissionInfo], context, {
+      automerge: args.automerge,
+      browser: args.browser,
+    });
   }
 
   context.splog.info(

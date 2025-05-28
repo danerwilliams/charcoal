@@ -23,7 +23,8 @@ type TSubmittedPR = {
 
 export async function submitPullRequest(
   submissionInfo: TPRSubmissionInfo,
-  context: TContext
+  context: TContext,
+  options?: { automerge?: boolean; browser?: boolean }
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
     submissionInfo,
@@ -49,6 +50,62 @@ export async function submitPullRequest(
       : {}),
     ...(pr.request.draft !== undefined ? { draft: pr.request.draft } : {}),
   });
+
+  // Enable automerge if requested
+  if (options?.automerge && pr.response.prNumber) {
+    try {
+      execFileSync('gh', [
+        'pr',
+        'merge',
+        pr.response.prNumber.toString(),
+        '--auto',
+        '--squash',
+      ]);
+      context.splog.info(
+        `${chalk.green('✓')} Automerge enabled for ${chalk.cyan(
+          pr.response.head
+        )}`
+      );
+    } catch (error) {
+      context.splog.warn(
+        `Failed to enable automerge for ${chalk.cyan(pr.response.head)}: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
+    }
+  }
+
+  // Open in browser if requested
+  if (options?.browser && pr.response.prURL) {
+    try {
+      const platform = process.platform;
+      let openCommand: string;
+
+      switch (platform) {
+        case 'darwin': // macOS
+          openCommand = 'open';
+          break;
+        case 'win32': // Windows
+          openCommand = 'start';
+          break;
+        default: // Linux and others
+          openCommand = 'xdg-open';
+          break;
+      }
+
+      execFileSync(openCommand, [pr.response.prURL]);
+      context.splog.info(
+        `${chalk.green('🌐')} Opened ${chalk.cyan(pr.response.head)} in browser`
+      );
+    } catch (error) {
+      context.splog.warn(
+        `Failed to open ${chalk.cyan(pr.response.head)} in browser: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
+    }
+  }
+
   context.splog.info(
     `${chalk.green(pr.response.head)}: ${pr.response.prURL} (${{
       updated: chalk.yellow,

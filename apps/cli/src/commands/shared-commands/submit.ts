@@ -98,6 +98,18 @@ export const args = {
     describe: 'Which branch to run this command from (default: current branch)',
     type: 'string',
   },
+  automerge: {
+    describe: 'Enable automerge on the pull request(s)',
+    type: 'boolean',
+    default: false,
+    alias: 'a',
+  },
+  browser: {
+    describe: 'Open the pull request(s) in the browser when finished',
+    type: 'boolean',
+    default: false,
+    alias: 'b',
+  },
 } as const;
 
 export const builder = args;

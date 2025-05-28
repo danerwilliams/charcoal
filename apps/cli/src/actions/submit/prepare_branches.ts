@@ -39,6 +39,8 @@ export async function getPRInfoForBranches(
     reviewers: string | undefined;
     select: boolean;
     always: boolean;
+    automerge: boolean;
+    browser: boolean;
   },
   context: TContext
 ): Promise<TPRSubmissionInfo> {
@@ -54,6 +56,8 @@ export async function getPRInfoForBranches(
         select: args.select,
         editPRFieldsInline: args.editPRFieldsInline,
         always: args.always,
+        automerge: args.automerge,
+        browser: args.browser,
       },
       context
     );
@@ -76,6 +80,7 @@ export async function getPRInfoForBranches(
               draft: args.draft,
               publish: args.publish,
               reviewers: args.reviewers,
+              automerge: args.automerge,
             },
             context
           )
@@ -84,6 +89,7 @@ export async function getPRInfoForBranches(
             body: '',
             reviewers: [],
             draft: false,
+            automerge: false,
           };
 
     submissionInfo.push({
@@ -102,6 +108,7 @@ export async function getPRInfoForBranches(
                 draft: args.draft,
                 publish: args.publish,
                 reviewers: args.reviewers,
+                automerge: args.automerge,
               },
               context
             )),
@@ -126,6 +133,8 @@ async function getPRAction(
     always: boolean;
     select: boolean;
     editPRFieldsInline: boolean | undefined;
+    automerge: boolean;
+    browser: boolean;
   },
   context: TContext
 ): Promise<TPRSubmissionAction | undefined> {
@@ -185,6 +194,7 @@ async function getPRCreationInfo(
     draft: boolean;
     publish: boolean;
     reviewers: string | undefined;
+    automerge: boolean;
   },
   context: TContext
 ): Promise<{
@@ -192,6 +202,7 @@ async function getPRCreationInfo(
   body: string;
   reviewers: string[];
   draft: boolean;
+  automerge: boolean;
 }> {
   if (args.editPRFieldsInline) {
     context.splog.newline();
@@ -243,6 +254,7 @@ async function getPRCreationInfo(
     body: submitInfo.body,
     reviewers,
     draft: createAsDraft,
+    automerge: args.automerge,
   };
 }
 
@@ -253,6 +265,7 @@ async function getPRUpdateInfo(
     draft: boolean;
     publish: boolean;
     reviewers: string | undefined;
+    automerge: boolean;
   },
   context: TContext
 ): Promise<{
@@ -260,6 +273,7 @@ async function getPRUpdateInfo(
   body?: string;
   reviewers: string[];
   draft: boolean | undefined;
+  automerge: boolean;
 }> {
   const submitInfo: TBranchPRInfo = {};
   if (args.editPRFieldsInline) {
@@ -307,6 +321,7 @@ async function getPRUpdateInfo(
     body: submitInfo.body,
     reviewers,
     draft,
+    automerge: args.automerge,
   };
 }
 
