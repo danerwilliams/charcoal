@@ -4,11 +4,12 @@
   "types": "dist/src/index.d.ts",
   "version": "0.3.2",
   "devDependencies": {
+    "rimraf": "^4.4.1",
     "typescript": "^4.6.4"
   },
   "scripts": {
     "eslint": "eslint . --ext .ts --ext .tsx",
-    "build": "rm -rf dist/ && tsc"
+    "build": "rimraf -rf dist/ && tsc"
   },
   "files": [
     "dist"

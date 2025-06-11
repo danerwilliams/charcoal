@@ -28,7 +28,8 @@
     ],
     "targets": [
       "node18-macos",
-      "node18-linux"
+      "node18-linux",
+      "node18-win"
     ],
     "outputPath": "pkg"
   },
@@ -40,7 +41,7 @@
     "postinstall": "node scripts/node_version.js || node dist/scripts/node_version.js",
     "lint": "eslint src --quiet --ext .ts --cache",
     "check": "tsc --noEmit",
-    "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js && cp src/lib/gt.fish dist/src/lib/gt.fish",
+    "build": "rimraf dist/ && yarn lint && tsc && cpy scripts/node_version.js dist/scripts/ && cpy src/lib/gt.fish dist/src/lib/",
     "build-pkg": "pkg dist/src/index.js -c package.json --public-packages \"*\"",
     "dev": "./scripts/installation/develop.sh",
     "cli": "node ./dist/src/index.js",
@@ -74,6 +75,7 @@
     "@typescript-eslint/parser": "^5.27.1",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
+    "cpy-cli": "^4.2.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "3.6.1",
@@ -85,6 +87,7 @@
     "pinst": "^3.0.0",
     "pkg": "^5.8.1",
     "prettier": "^2.8.3",
+    "rimraf": "^4.4.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   }
