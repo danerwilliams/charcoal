@@ -11,7 +11,7 @@ import {
   footerFooter,
   footerTitle,
 } from '../create_pr_body_footer';
-import { execFileSync } from 'child_process';
+import { updatePullRequest } from '../../lib/git/gh_pr_edit';
 
 // eslint-disable-next-line max-lines-per-function
 export async function submitAction(
@@ -144,20 +144,16 @@ export async function submitAction(
     const prInfo = context.engine.getPrInfo(branch);
     const footer = createPrBodyFooter(context, branch);
 
-    if (!prInfo) {
+    if (!prInfo || prInfo.number === undefined) {
       throw new Error(`PR info is undefined for branch ${branch}`);
     }
 
     const prFooterChanged = !prInfo.body?.includes(footer);
 
     if (prFooterChanged) {
-      execFileSync('gh', [
-        'pr',
-        'edit',
-        `${prInfo.number}`,
-        '--body',
-        updatePrBodyFooter(prInfo.body, footer),
-      ]);
+      updatePullRequest(prInfo.number, {
+        body: updatePrBodyFooter(prInfo.body, footer),
+      });
 
       context.splog.info(
         `${chalk.green(branch)}: ${prInfo.url} (${

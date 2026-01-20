@@ -5,6 +5,7 @@ import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
 import { execFileSync } from 'child_process';
+import { updatePullRequest } from '../../lib/git/gh_pr_edit';
 
 export type TPRSubmissionInfo = t.UnwrapSchemaMap<
   typeof API_ROUTES.submitPullRequests.params
@@ -110,13 +111,7 @@ async function submitPrToGithub({
     const prBaseChanged = prInfo.baseRefName !== request.base;
 
     if (prBaseChanged) {
-      execFileSync('gh', [
-        'pr',
-        'edit',
-        prInfo.headRefName,
-        '--base',
-        request.base,
-      ]);
+      updatePullRequest(prInfo.number, { base: request.base });
     }
 
     return {
