@@ -6,7 +6,15 @@
 
 ## Install
 
+### MacOS
 `brew install danerwilliams/tap/charcoal`
+
+### Linux
+```
+curl -L https://github.com/danerwilliams/charcoal/releases/latest/download/gt-linux -o gt && \
+chmod +x gt && \
+sudo mv gt /usr/local/bin/gt
+```
 
 ## Announcement
 
