@@ -39,6 +39,7 @@ export async function getPRInfoForBranches(
     reviewers: string | undefined;
     select: boolean;
     always: boolean;
+    bodyText: string | undefined;
   },
   context: TContext
 ): Promise<TPRSubmissionInfo> {
@@ -76,6 +77,7 @@ export async function getPRInfoForBranches(
               draft: args.draft,
               publish: args.publish,
               reviewers: args.reviewers,
+              bodyText: args.bodyText,
             },
             context
           )
@@ -185,6 +187,7 @@ async function getPRCreationInfo(
     draft: boolean;
     publish: boolean;
     reviewers: string | undefined;
+    bodyText: string | undefined;
   },
   context: TContext
 ): Promise<{
@@ -215,13 +218,15 @@ async function getPRCreationInfo(
       context
     );
 
-    submitInfo.body = await getPRBody(
-      {
-        branchName: args.branchName,
-        editPRFieldsInline: args.editPRFieldsInline,
-      },
-      context
-    );
+    submitInfo.body =
+      args.bodyText ??
+      (await getPRBody(
+        {
+          branchName: args.branchName,
+          editPRFieldsInline: args.editPRFieldsInline,
+        },
+        context
+      ));
   } finally {
     // Save locally in case this command fails
     context.engine.upsertPrInfo(args.branchName, submitInfo);

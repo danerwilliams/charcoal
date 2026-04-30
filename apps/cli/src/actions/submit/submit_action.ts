@@ -12,6 +12,7 @@ import {
   footerTitle,
 } from '../create_pr_body_footer';
 import { execFileSync } from 'child_process';
+import { readFileSync } from 'fs';
 
 // eslint-disable-next-line max-lines-per-function
 export async function submitAction(
@@ -28,6 +29,7 @@ export async function submitAction(
     select: boolean;
     always: boolean;
     branch: string | undefined;
+    bodyFile: string | undefined;
   },
   context: TContext
 ): Promise<void> {
@@ -84,6 +86,9 @@ export async function submitAction(
     )
   );
   await populateRemoteShasPromise;
+  const bodyText = args.bodyFile
+    ? readFileSync(args.bodyFile).toString()
+    : undefined;
   const submissionInfos = await getPRInfoForBranches(
     {
       branchNames: branchNames,
@@ -95,6 +100,7 @@ export async function submitAction(
       dryRun: args.dryRun,
       select: args.select,
       always: args.always,
+      bodyText,
     },
     context
   );
@@ -148,7 +154,8 @@ export async function submitAction(
       throw new Error(`PR info is undefined for branch ${branch}`);
     }
 
-    const prFooterChanged = !prInfo.body?.includes(footer);
+    const bodyWithFooter = updatePrBodyFooter(prInfo.body, footer);
+    const prFooterChanged = bodyWithFooter !== prInfo.body;
 
     if (prFooterChanged) {
       execFileSync('gh', [
@@ -156,7 +163,7 @@ export async function submitAction(
         'edit',
         `${prInfo.number}`,
         '--body',
-        updatePrBodyFooter(prInfo.body, footer),
+        bodyWithFooter,
       ]);
 
       context.splog.info(
@@ -187,17 +194,20 @@ export function updatePrBodyFooter(
   const escapedTitleText = titleText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const escapedFooterText = footerText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  // Match a pattern where there's the main body content, followed by the footer section
-  // The footer section starts with the title text and ends with the footer text
   const matchExistingFooter = new RegExp(
-    `(?<body>[\\s\\S]*)(?<footer>${escapedTitleText}[\\s\\S]*?${escapedFooterText})$`,
-    's'
+    `${escapedTitleText}[\\s\\S]*?${escapedFooterText}`,
+    'g'
   );
 
-  const match = matchExistingFooter.exec(body);
+  const matches = [...body.matchAll(matchExistingFooter)];
 
-  if (match?.groups?.body) {
-    return match.groups.body + footer;
+  if (matches.length > 0) {
+    const firstMatch = matches[0];
+    const lastMatch = matches[matches.length - 1];
+    const firstIndex = firstMatch.index ?? 0;
+    const lastEndIndex = (lastMatch.index ?? 0) + lastMatch[0].length;
+
+    return body.slice(0, firstIndex) + footer + body.slice(lastEndIndex);
   }
 
   return body + footer;

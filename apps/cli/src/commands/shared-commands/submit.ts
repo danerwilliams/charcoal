@@ -55,6 +55,10 @@ export const args = {
     type: 'string',
     alias: 'r',
   },
+  'body-file': {
+    describe: 'Read the pull request body from a file when creating a new PR.',
+    type: 'string',
+  },
   'dry-run': {
     describe:
       'Reports the PRs that would be submitted and terminates. No branches are pushed and no PRs are opened or updated.',
