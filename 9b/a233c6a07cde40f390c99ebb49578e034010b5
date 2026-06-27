@@ -1,0 +1,24 @@
+apps/cli/src/actions/submit/submit_prs.ts
+  s_6912db1f8d2431::t_376a7e2d6e1911 93-95
+  s_6912db1f8d2431::t_b8381a1f30f743 117
+  s_6912db1f8d2431::t_888fd321efbedd 115-116,118-121
+  s_6912db1f8d2431::t_3545df93fdcd98 147
+apps/cli/src/actions/submit/submit_action.ts
+  s_6912db1f8d2431::t_035cbc2cb21ca4 143-145,147-154,157-160,163,176
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "9ba233c6a07cde40f390c99ebb49578e034010b5",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
