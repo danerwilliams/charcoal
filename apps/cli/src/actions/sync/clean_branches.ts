@@ -4,7 +4,7 @@ import { deleteBranchAction, isSafeToDelete } from '../delete_branch';
 
 /**
  * This method is assumed to be idempotent -- if a merge conflict interrupts
- * execution of this method, we simply restart the method upon running `gt
+ * execution of this method, we simply restart the method upon running `ch
  * continue`.
  *
  * It returns a list of branches whose parents have changed so that we know

@@ -8,6 +8,21 @@
 
 `brew install danerwilliams/tap/charcoal`
 
+The command is `ch`:
+
+```sh
+ch --help
+```
+
+> [!IMPORTANT]
+> As of `v1.0.0` the binary is `ch` (previously `gt`). This avoids colliding with
+> Graphite's own `gt` if you have both installed. If you have muscle memory for
+> `gt`, alias it in your shell:
+>
+> ```sh
+> alias gt=ch   # add to ~/.zshrc or ~/.bashrc
+> ```
+
 ## Announcement
 
 Check out my blog post announcement [here](https://danewilliams.com/announcing-charcoal) 🙂

@@ -19,7 +19,7 @@ function shouldCompleteBranch(current: string, argv: Arguments): boolean {
   // this handles both with and without --branch because it's the only string arg
   return (
     ((argv['_'].length <= 3 &&
-      // gt bco, bdl, btr, but
+      // ch bco, bdl, btr, but
       // Check membership in argv to ensure that "bco" is its own entry (and not
       // a substring of another command). Since we're dealing with a positional,
       // we also want to make sure that the current argument is the positional

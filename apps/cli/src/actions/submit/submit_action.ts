@@ -125,7 +125,7 @@ export async function submitAction(
             `Force-with-lease push of ${chalk.yellow(
               submissionInfo.head
             )} failed due to external changes to the remote branch.`,
-            'If you are collaborating on this stack, try `gt downstack get` to pull in changes.',
+            'If you are collaborating on this stack, try `ch downstack get` to pull in changes.',
             'Alternatively, use the `--force` option of this command to bypass the stale info warning.',
           ].join('\n')
         );

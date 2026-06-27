@@ -41,7 +41,7 @@ export const handler = async (argv: argsT): Promise<void> => {
     } else {
       context.splog.info(
         context.userConfig.data.branchPrefix ||
-          'branch-prefix is not set. Try running `gt user branch-prefix --set <prefix>` to update the value.'
+          'branch-prefix is not set. Try running `ch user branch-prefix --set <prefix>` to update the value.'
       );
     }
   });
