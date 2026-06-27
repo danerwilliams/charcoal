@@ -1,17 +1,104 @@
 import chalk from 'chalk';
+import { execFileSync } from 'child_process';
 import { TContext } from '../../lib/context';
-import { KilledError, RebaseConflictError } from '../../lib/errors';
+import {
+  ExitFailedError,
+  KilledError,
+  RebaseConflictError,
+} from '../../lib/errors';
 import { assertUnreachable } from '../../lib/utils/assert_unreachable';
 import { persistContinuation } from '../persist_continuation';
 import { printConflictStatus } from '../print_conflict_status';
 
 export async function getAction(
-  _args: { branchName: string | undefined; force: boolean },
+  args: { branchName: string | undefined; force: boolean },
   context: TContext
 ): Promise<void> {
-  context.splog.message(
-    '⚠️ This command is not not yet implemented in Charcoal :-( \n\nPlease check out the issue on GitHub https://github.com/danerwilliams/charcoal/issues/6'
+  const trunk = context.engine.trunk;
+
+  let target = args.branchName ?? context.engine.currentBranch;
+  if (!target) {
+    throw new ExitFailedError(
+      'No branch or PR specified, and no current branch to get.'
+    );
+  }
+
+  // A numeric argument is a PR number; resolve it to its head branch.
+  if (/^\d+$/.test(target)) {
+    target = prFieldOrThrow(target, 'headRefName');
+  }
+
+  if (target === trunk) {
+    context.splog.info(`Nothing to get: ${chalk.cyan(trunk)} is trunk.`);
+    return;
+  }
+
+  // Charcoal doesn't push branch metadata to the remote, so we reconstruct the
+  // downstack chain (trunk -> target) by walking each PR's base ref.
+  const downstack: string[] = [];
+  const seen = new Set<string>();
+  let branch: string | undefined = target;
+  while (branch && branch !== trunk) {
+    if (seen.has(branch)) {
+      throw new ExitFailedError(
+        `Encountered a cycle while resolving the stack for ${chalk.yellow(
+          target
+        )}.`
+      );
+    }
+    seen.add(branch);
+    downstack.unshift(branch);
+    branch = prFieldMaybe(branch, 'baseRefName');
+  }
+
+  if (branch !== trunk) {
+    throw new ExitFailedError(
+      [
+        `Could not trace ${chalk.yellow(target)} back to trunk (${chalk.cyan(
+          trunk
+        )}) from its pull requests.`,
+        `\`ch get\` reconstructs a stack from open PRs, so every branch from trunk to ${chalk.yellow(
+          target
+        )} needs one.`,
+      ].join('\n')
+    );
+  }
+
+  await getBranchesFromRemote(
+    { downstack, base: trunk, force: args.force },
+    context
   );
+
+  context.engine.checkoutBranch(target);
+}
+
+function prFieldMaybe(
+  branchOrNumber: string,
+  field: 'headRefName' | 'baseRefName'
+): string | undefined {
+  try {
+    const pr = JSON.parse(
+      execFileSync('gh', ['pr', 'view', branchOrNumber, '--json', field], {
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).toString()
+    );
+    return pr[field] || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function prFieldOrThrow(
+  branchOrNumber: string,
+  field: 'headRefName' | 'baseRefName'
+): string {
+  const value = prFieldMaybe(branchOrNumber, field);
+  if (!value) {
+    throw new ExitFailedError(
+      `Could not find an open pull request for "${branchOrNumber}".`
+    );
+  }
+  return value;
 }
 
 export async function getBranchesFromRemote(
