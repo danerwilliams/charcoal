@@ -9,11 +9,11 @@ for (const scene of allScenes) {
     configureTest(this, scene);
 
     it('Can run branch create', () => {
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
       expect(scene.repo.currentBranchName()).to.equal('a');
       scene.repo.createChangeAndCommit('2', '2');
 
-      scene.repo.runCliCommand(['branch', 'down']);
+      scene.repo.runCliCommand(['down']);
       expect(scene.repo.currentBranchName()).to.equal('main');
     });
 
@@ -22,14 +22,14 @@ for (const scene of allScenes) {
       scene.repo.createPrecommitHook('exit 1');
       scene.repo.createChange('2');
       expect(() => {
-        scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+        scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
       }).to.throw(Error);
       expect(scene.repo.currentBranchName()).to.equal('main');
     });
 
     it('Can create a branch without providing a name', () => {
       scene.repo.createChange('2');
-      scene.repo.runCliCommand([`branch`, `create`, `-m`, `feat(test): info.`]);
+      scene.repo.runCliCommand([`create`, `-m`, `feat(test): info.`]);
       expect(scene.repo.currentBranchName().includes('feat_test_info')).to.be
         .true;
       expectCommits(scene.repo, 'feat(test): info.');
@@ -38,7 +38,6 @@ for (const scene of allScenes) {
     it('Can create a branch with add all option', () => {
       scene.repo.createChange('23', 'test', true);
       scene.repo.runCliCommand([
-        `branch`,
         `create`,
         `test-branch`,
         `-m`,
@@ -49,22 +48,15 @@ for (const scene of allScenes) {
 
     it('Can restack its parents children', () => {
       scene.repo.createChange('a', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
-      scene.repo.runCliCommand(['bd']);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand(['down']);
 
       scene.repo.createChange('c', 'c');
-      scene.repo.runCliCommand([
-        `branch`,
-        `create`,
-        `c`,
-        `-m`,
-        `c`,
-        `--insert`,
-      ]);
-      expect(() => scene.repo.runCliCommand(['branch', 'up'])).not.to.throw();
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`, `--insert`]);
+      expect(() => scene.repo.runCliCommand(['up'])).not.to.throw();
 
       expectCommits(scene.repo, 'b, c, a');
     });

@@ -45,22 +45,22 @@ for (const scene of allScenes) {
     it('Can continue a repo sync with one merge conflict', async () => {
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('a', 'file_with_no_merge_conflict_a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('b', 'file_with_no_merge_conflict_b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('c', 'file_with_merge_conflict');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('d', 'file_with_merge_conflict');
-      scene.repo.runCliCommand([`branch`, `create`, `d`, `-m`, `d`]);
+      scene.repo.runCliCommand([`create`, `d`, `-m`, `d`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('e', 'file_with_no_merge_conflict_e');
-      scene.repo.runCliCommand([`branch`, `create`, `e`, `-m`, `e`]);
+      scene.repo.runCliCommand([`create`, `e`, `-m`, `e`]);
 
       expectBranches(scene.repo, 'a, b, c, d, e, main');
 
@@ -92,25 +92,25 @@ for (const scene of allScenes) {
     it('Can continue a repo sync with multiple merge conflicts', () => {
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('a', 'file_with_no_merge_conflict_a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('b', 'file_with_no_merge_conflict_b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('c', 'file_with_merge_conflict_1');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       scene.repo.createChange('d', 'file_with_merge_conflict_2');
-      scene.repo.runCliCommand([`branch`, `create`, `d`, `-m`, `d`]);
+      scene.repo.runCliCommand([`create`, `d`, `-m`, `d`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('e', 'file_with_merge_conflict_1');
-      scene.repo.runCliCommand([`branch`, `create`, `e`, `-m`, `e`]);
+      scene.repo.runCliCommand([`create`, `e`, `-m`, `e`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChange('f', 'file_with_merge_conflict_2');
-      scene.repo.runCliCommand([`branch`, `create`, `f`, `-m`, `f`]);
+      scene.repo.runCliCommand([`create`, `f`, `-m`, `f`]);
 
       expectBranches(scene.repo, 'a, b, c, d, e, f, main');
 

@@ -12,9 +12,9 @@ for (const scene of allScenes) {
 
     it("Can print stacks if a branch's parent has been deleted", () => {
       scene.repo.createChange('a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
       scene.repo.createChange('b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
       scene.repo.deleteBranch('a');
 
       scene.repo.checkoutBranch('main');

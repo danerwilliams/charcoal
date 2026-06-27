@@ -9,16 +9,16 @@ for (const scene of allScenes) {
 
     it('Can continue a commit create with single merge conflict', () => {
       scene.repo.createChange('a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChange('1');
 
       expect(() =>
-        scene.repo.runCliCommand([`commit`, `create`, `-m`, `c`])
+        scene.repo.runCliCommand([`modify`, `-c`, `-m`, `c`])
       ).to.throw();
       expect(scene.repo.rebaseInProgress()).to.be.true;
 
@@ -45,20 +45,20 @@ for (const scene of allScenes) {
     it('Can run continue multiple times on a commit create with multiple merge conflicts', () => {
       scene.repo.createChange('a', '1');
       scene.repo.createChange('a', '2');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b', '1');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('c', '2');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChange('1', '1');
       scene.repo.createChange('2', '2');
 
       expect(() =>
-        scene.repo.runCliCommand([`commit`, `create`, `-m`, 'a12'])
+        scene.repo.runCliCommand([`modify`, `-c`, `-m`, 'a12'])
       ).to.throw();
       expect(scene.repo.rebaseInProgress()).to.be.true;
 

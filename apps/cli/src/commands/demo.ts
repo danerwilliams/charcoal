@@ -26,7 +26,6 @@ export const handler = async (argv: argsT): Promise<void> => {
 
     repo.createChange('[Product] Add review queue filter api');
     repo.runCliCommand([
-      'branch',
       'create',
       `${id}-review_queue_api`,
       '-m',
@@ -35,7 +34,6 @@ export const handler = async (argv: argsT): Promise<void> => {
 
     repo.createChange('[Product] Add review queue filter server');
     repo.runCliCommand([
-      'branch',
       'create',
       `${id}-review_queue_server`,
       '-m',
@@ -44,7 +42,6 @@ export const handler = async (argv: argsT): Promise<void> => {
 
     repo.createChange('[Product] Add review queue filter frontend');
     repo.runCliCommand([
-      'branch',
       'create',
       `${id}-review_queue_frontend`,
       '-m',
@@ -55,7 +52,6 @@ export const handler = async (argv: argsT): Promise<void> => {
 
     repo.createChange('[Bug Fix] Fix crashes on reload');
     repo.runCliCommand([
-      'branch',
       'create',
       `${id}-fix_crash_on_reload`,
       '-m',
@@ -66,7 +62,6 @@ export const handler = async (argv: argsT): Promise<void> => {
 
     repo.createChange('[Bug Fix] Account for empty state');
     repo.runCliCommand([
-      'branch',
       'create',
       `${id}-account_for_empty_state`,
       '-m',

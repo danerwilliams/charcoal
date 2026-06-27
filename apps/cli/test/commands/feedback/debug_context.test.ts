@@ -16,10 +16,10 @@ for (const scene of [new TrailingProdScene()]) {
 
     it('Can recreate a tmp repo based on debug context', () => {
       scene.repo.createChange('a', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       const context = scene.repo.runCliCommandAndGetOutput([
         `feedback`,
@@ -43,7 +43,7 @@ for (const scene of [new TrailingProdScene()]) {
       newRepo.checkoutBranch('b');
       expect(newRepo.currentBranchName()).to.eq('b');
 
-      newRepo.runCliCommand([`bd`]);
+      newRepo.runCliCommand([`down`]);
       expect(newRepo.currentBranchName()).to.eq('a');
 
       fs.emptyDirSync(tmpDir);

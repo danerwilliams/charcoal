@@ -21,7 +21,7 @@ describe(`(${scene}): correctly get PR information for branches`, function () {
     const message = `${title}\n\n${body}`;
 
     scene.repo.createChange('a');
-    scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, message]);
+    scene.repo.runCliCommand([`create`, `a`, `-m`, message]);
 
     const context = scene.getContext(true);
 

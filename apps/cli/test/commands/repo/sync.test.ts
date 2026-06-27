@@ -41,7 +41,7 @@ for (const scene of allScenes) {
 
     it('Can delete a single merged branch', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       expectBranches(scene.repo, 'a, main');
 
@@ -54,7 +54,7 @@ for (const scene of allScenes) {
 
     it('Can delete a branch marked as merged', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       expectBranches(scene.repo, 'a, main');
 
@@ -72,7 +72,7 @@ for (const scene of allScenes) {
 
     it('Can delete a branch marked as closed', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       expectBranches(scene.repo, 'a, main');
       writeMetadataRef(
@@ -95,10 +95,10 @@ for (const scene of allScenes) {
 
     it('Can delete the foundation of a double stack and restack it', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('3', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       expectBranches(scene.repo, 'a, b, main');
 
@@ -120,13 +120,13 @@ for (const scene of allScenes) {
 
     it('Can delete two branches off a three-stack', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('3', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('4', 'c');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       expectBranches(scene.repo, 'a, b, c, main');
 
@@ -140,13 +140,13 @@ for (const scene of allScenes) {
 
     it('Can delete two branches, while syncing inbetween, off a three-stack', async () => {
       scene.repo.createChange('2', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('3', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('4', 'c');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       expectBranches(scene.repo, 'a, b, c, main');
 

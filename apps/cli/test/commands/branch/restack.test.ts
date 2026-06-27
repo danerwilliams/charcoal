@@ -10,16 +10,16 @@ for (const scene of allScenes) {
 
     it('Can restack one branch', () => {
       scene.repo.createChange('a', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChangeAndCommit('1.5', '1.5');
 
       scene.repo.checkoutBranch('b');
-      scene.repo.runCliCommand([`branch`, `restack`]);
+      scene.repo.runCliCommand([`restack`, `-o`]);
 
       expect(scene.repo.currentBranchName()).to.eq('b');
       expectCommits(scene.repo, 'b, 1.5, a, 1');

@@ -15,10 +15,10 @@ for (const scene of [new TrailingProdScene()]) {
     it("Can print stacks if a branch's parent has been deleted", () => {
       // This is mostly an effort to recreate a messed-up repo state that created a bug for a user.
       scene.repo.createChange('a', 'a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b', 'b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.checkoutBranch('main');
       scene.repo.createChangeAndCommit('2', '2');
@@ -30,14 +30,14 @@ for (const scene of [new TrailingProdScene()]) {
     });
 
     it('Doesnt error when creating an empty branch because of empty commits', () => {
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
       scene.repo.checkoutBranch('main');
       expect(() => scene.repo.runCliCommand([`ls`])).to.not.throw(Error);
     });
 
     it('Works if branch and file have same name', () => {
       const textFileName = 'test.txt';
-      scene.repo.runCliCommand([`branch`, `create`, textFileName, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, textFileName, `-m`, `a`]);
 
       // Creates a commit with contents "a" in file "test.txt"
       scene.repo.createChangeAndCommit('a');
