@@ -1,0 +1,97 @@
+apps/cli/src/commands/branch-commands/restack.ts
+  s_6912db1f8d2431::t_b028eee046b41e 20-21
+apps/cli/src/commands/stack.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/src/lib/runner.ts
+  s_6912db1f8d2431::t_373fdea7aac58f 168
+  s_6912db1f8d2431::t_b028eee046b41e 147
+apps/cli/src/commands/feedback-commands/debug_context.ts
+  s_6912db1f8d2431::t_b028eee046b41e 13,20
+apps/cli/src/lib/utils/splog.ts
+  s_6912db1f8d2431::t_b028eee046b41e 44,72
+apps/cli/src/lib/spiffy/user_config_spf.ts
+  s_6912db1f8d2431::t_1b9cd01f086407 122,124
+  s_6912db1f8d2431::t_1d8f2824f1fe5f 108,110
+apps/cli/src/lib/ch.fish
+  s_6912db1f8d2431::t_080e35ec535055 1-31
+apps/cli/test/commands/user_config/editor.test.ts
+  s_6912db1f8d2431::t_8bbfc7ccf71677 25
+apps/cli/src/lib/spiffy/repo_config_spf.ts
+  s_6912db1f8d2431::t_b028eee046b41e 60,76,91,113
+apps/cli/src/actions/log.ts
+  s_6912db1f8d2431::t_b028eee046b41e 270,291
+apps/cli/src/commands/user-commands/branch_prefix.ts
+  s_6912db1f8d2431::t_b028eee046b41e 44
+apps/cli/src/commands/user.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/src/commands/downstack-commands/restack.ts
+  s_6912db1f8d2431::t_b028eee046b41e 21-22
+apps/cli/src/commands/shared-commands/submit.ts
+  s_6912db1f8d2431::t_b028eee046b41e 9,12,15,18,20-21
+apps/cli/src/lib/utils/git_repo.ts
+  s_6912db1f8d2431::t_b028eee046b41e 8
+apps/cli/src/commands/repo.ts
+  s_6912db1f8d2431::t_b028eee046b41e 6
+apps/cli/src/actions/create_branch.ts
+  s_6912db1f8d2431::t_b028eee046b41e 64
+apps/cli/src/commands/upstack.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/src/commands/fish.ts
+  s_6912db1f8d2431::t_744f210b16ac29 18
+apps/cli/src/lib/errors.ts
+  s_6912db1f8d2431::t_b028eee046b41e 61,89
+apps/cli/src/actions/init.ts
+  s_6912db1f8d2431::t_b028eee046b41e 100-101
+apps/cli/src/commands/completion.ts
+  s_6912db1f8d2431::t_b028eee046b41e 22
+apps/cli/package.json
+  s_6912db1f8d2431::t_74986a6c4aaa26 27
+  s_6912db1f8d2431::t_cc1085ea7cfb49 43
+  s_6912db1f8d2431::t_36d445a946a429 59-60
+apps/cli/src/actions/submit/submit_action.ts
+  s_6912db1f8d2431::t_b028eee046b41e 128
+apps/cli/src/actions/submit/validate_branches.ts
+  s_6912db1f8d2431::t_b028eee046b41e 42,109,119
+apps/cli/src/commands/downstack.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/src/actions/submit/prepare_branches.ts
+  s_6912db1f8d2431::t_b028eee046b41e 338
+apps/cli/src/lib/pre-yargs/deprecated_commands.ts
+  s_6912db1f8d2431::t_b028eee046b41e 10,15,20
+README.md
+  s_6912db1f8d2431::t_4927603b592d19 11-25
+apps/cli/src/commands/commit.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/test/commands/user_config/pager.test.ts
+  s_6912db1f8d2431::t_8bbfc7ccf71677 39
+apps/cli/src/actions/print_conflict_status.ts
+  s_6912db1f8d2431::t_b028eee046b41e 36,40,44
+apps/cli/src/commands/branch.ts
+  s_6912db1f8d2431::t_b028eee046b41e 5
+apps/cli/src/actions/sync/clean_branches.ts
+  s_6912db1f8d2431::t_ee91cf3a8e2c25 7
+apps/cli/src/commands/feedback.ts
+  s_6912db1f8d2431::t_b028eee046b41e 11
+apps/cli/src/actions/checkout_branch.ts
+  s_6912db1f8d2431::t_b028eee046b41e 44,58
+apps/cli/src/commands/branch-commands/submit.ts
+  s_6912db1f8d2431::t_b028eee046b41e 17-18
+apps/cli/src/commands/upstack-commands/submit.ts
+  s_6912db1f8d2431::t_b028eee046b41e 17-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "e97b8f890e4193b17c3e9209b8a31b8d4fe9e84d",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
