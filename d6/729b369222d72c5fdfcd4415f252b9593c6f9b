@@ -1,0 +1,27 @@
+apps/cli/package.json
+  s_6912db1f8d2431::t_3c5c06129754be 3
+DOCUMENTATION.md
+  s_6912db1f8d2431::t_e89d4451223c1c 1-505
+.github/workflows/push.yml
+  s_6912db1f8d2431::t_fead5956c8d043 62-71,84,88-89,97,100-101,104-108,111-113,117,119
+apps/cli/src/actions/submit/prepare_branches.ts
+  s_6912db1f8d2431::t_a0b5a090085687 338
+README.md
+  s_6912db1f8d2431::t_fda490c55ab313 48,50,52-62,64-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "d6729b369222d72c5fdfcd4415f252b9593c6f9b",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
