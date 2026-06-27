@@ -58,17 +58,17 @@ jobs:
     name: Upload executable binaries
     strategy:
       matrix:
-        os: [macos, ubuntu]
         include:
-          - os: macos
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node18-macos -o "gt-macos-x86-${{ github.sha }}"
-            artifact-name: gt-macos-x86-${{ github.sha }}
-            artifact-path: apps/cli/gt-macos-x86-${{ github.sha }}
-          - os: ubuntu
-            build: yarn workspace @danerwilliams/charcoal run build-pkg -t node18-linux -o "gt-linux-${{ github.sha }}"
-            artifact-name: gt-linux-${{ github.sha }}
-            artifact-path: apps/cli/gt-linux-${{ github.sha }}
-    runs-on: ${{ matrix.os }}-latest
+          - runner: macos-latest
+            target: node18-macos-x64
+            name: ch-macos-x64
+          - runner: macos-latest
+            target: node18-macos-arm64
+            name: ch-macos-arm64
+          - runner: ubuntu-latest
+            target: node18-linux
+            name: ch-linux
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -81,12 +81,12 @@ jobs:
       - name: Build
         run: yarn turbo run build
       - name: Build binary
-        run: ${{ matrix.build }}
+        run: yarn workspace @danerwilliams/charcoal run build-pkg -t ${{ matrix.target }} -o "${{ matrix.name }}-${{ github.sha }}"
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact-name }}
-          path: ${{ matrix.artifact-path }}
+          name: ${{ matrix.name }}-${{ github.sha }}
+          path: apps/cli/${{ matrix.name }}-${{ github.sha }}
 
   release:
     name: Release version
@@ -94,22 +94,27 @@ jobs:
     needs: [lint_and_fast_tests, create-binaries]
     runs-on: ubuntu-latest
     steps:
-      - name: Download mac x86
+      - name: Download macOS arm64
         uses: actions/download-artifact@v4
         with:
-          name: gt-macos-x86-${{ github.sha }}
-      - name: Download linux
+          name: ch-macos-arm64-${{ github.sha }}
+      - name: Download macOS x64
         uses: actions/download-artifact@v4
         with:
-          name: gt-linux-${{ github.sha }}
+          name: ch-macos-x64-${{ github.sha }}
+      - name: Download Linux
+        uses: actions/download-artifact@v4
+        with:
+          name: ch-linux-${{ github.sha }}
       - name: Rename files
         run: |
-          mv gt-macos-x86-${{ github.sha }} gt-macos-x86;
-          mv gt-linux-${{ github.sha }} gt-linux
+          mv ch-macos-arm64-${{ github.sha }} ch-macos-arm64;
+          mv ch-macos-x64-${{ github.sha }} ch-macos-x64;
+          mv ch-linux-${{ github.sha }} ch-linux
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "gt-macos-x86,gt-linux"
+          artifacts: "ch-macos-arm64,ch-macos-x64,ch-linux"
           draft: false
-          prerelease: true
+          prerelease: false
           allowUpdates: true
