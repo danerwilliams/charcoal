@@ -1,0 +1,21 @@
+apps/cli/test/actions/remote_actions.test.ts
+  s_6912db1f8d2431::t_f6b4ad05368677 109-115
+apps/cli/src/actions/sync/get.ts
+  s_6912db1f8d2431::t_585da1a93d25fd 2,4-8,14,17-69,71-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "6fe0bef2306587e8dcc0cf0e4727e58fa70d1038",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
