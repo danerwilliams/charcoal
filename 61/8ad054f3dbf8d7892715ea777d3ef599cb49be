@@ -1,0 +1,19 @@
+yarn.lock
+  s_6912db1f8d2431::t_929d38ccc7f932 353-354
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "618ad054f3dbf8d7892715ea777d3ef599cb49be",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
