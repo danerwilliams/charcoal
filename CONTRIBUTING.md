@@ -62,26 +62,27 @@ DEBUG=1 yarn test-one "<path to .js test file in dist folder>"
 
 ```
 cd apps/cli
-yarn cli <command> # (to run `gt <command>`)
+yarn cli <command> # (to run `ch <command>`)
 ```
 
-Linking `gt` to a locally built version (includes a build)
+Linking `ch` to a locally built version (includes a build)
 
 ```
 cd apps/cli
 yarn dev
 # then to run commands:
-gt <command>
+ch <command>
 ```
 
-## Generating the MacOS ARM Binary
+## Release Binaries
 
-Due to limitations with Github actions, we need to manually generate the MacOS ARM binary for a release.
+The release workflow builds all three binaries automatically on a `v*` tag:
+`ch-macos-arm64`, `ch-macos-x64`, and `ch-linux`.
 
-From the cli app directory:
+To build one locally (from the cli app directory), e.g. the macOS ARM binary:
 
 ```
-yarn build-pkg -t node18-macos -o gt-macos-arm64
+yarn build-pkg -t node18-macos-arm64 -o ch-macos-arm64
 ```
 
 ## Getting Hashes for the Homebrew Tap
