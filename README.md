@@ -45,13 +45,26 @@ However, many organizations aren't interested in paying for Graphite's team plan
 
 The Graphite CLI does not need to depend on Graphite's API, so this project allows for use of the CLI with any git repository (even ones hosted on platforms other than GitHub!), entirely for free.
 
-## User guide
+## Commands
 
-<https://graphite.dev/docs/graphite-cli/>
+Charcoal uses a flat command surface that mirrors modern Graphite, e.g.:
 
-Right now, the Graphite Docs are more or less in sync with the features available in Charcoal.
+```sh
+ch create -m "my change"   # create a branch + commit staged changes
+ch modify -a               # amend the current branch and restack upstack
+ch submit --stack          # push the stack and open/update PRs
+ch sync                    # pull trunk, prune merged branches, restack
+ch ls                      # view your stacks
+ch up / ch down            # move through the stack
+ch checkout                # interactively switch branches
+```
 
-As Graphite continues to develop their private version of the CLI, however, these will become out of sync. Ideally we can add our own open source docs to accompany this project.
+See **[DOCUMENTATION.md](./DOCUMENTATION.md)** for the full command reference.
+
+> [!NOTE]
+> Graphite's own docs (<https://graphite.dev/docs/graphite-cli/>) have diverged
+> from this fork — they now require a Graphite account and document commands that
+> differ from Charcoal's. Use [DOCUMENTATION.md](./DOCUMENTATION.md) instead.
 
 ## Contributing
 

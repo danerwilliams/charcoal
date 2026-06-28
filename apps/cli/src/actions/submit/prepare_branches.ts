@@ -335,7 +335,7 @@ function cliAuthPrecondition(context: TContext): boolean {
 
   if (isGithubIntegrationEnabled && !isGhAuthorized) {
     throw new PreconditionsFailedError(
-      `Please authenticate your CLI with Github by running ch auth and then retry. To ignore this message in the future and use Charcoal without Github integration, run ch repo disable-github.`
+      `Please authenticate your CLI with Github by running ch auth and then retry. To ignore this message in the future and use Charcoal without Github integration, run ch repo github --no-enable.`
     );
   }
 
