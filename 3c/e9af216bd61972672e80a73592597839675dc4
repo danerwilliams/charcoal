@@ -1,0 +1,26 @@
+apps/cli/test/actions/submit_action.test.ts
+  s_6912db1f8d2431::t_9ed6567a324cff 129-134,136,138-139,142-146,148-153,155-162,164-168
+  s_6912db1f8d2431::t_d697f41c3a46f5 5-8
+README.md
+  s_6912db1f8d2431::t_2fb99b64c37866 11-22
+.github/workflows/push.yml
+  s_6912db1f8d2431::t_ff209fe9afc48c 20-24,26,29-30
+apps/cli/src/actions/submit/submit_action.ts
+  s_6912db1f8d2431::t_9fcd8495b5d21d 205-213,216
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "3ce9af216bd61972672e80a73592597839675dc4",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
