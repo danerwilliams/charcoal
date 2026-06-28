@@ -76,13 +76,16 @@ ch <command>
 
 ## Release Binaries
 
-The release workflow builds all three binaries automatically on a `v*` tag:
-`ch-macos-arm64`, `ch-macos-x64`, and `ch-linux`.
+Binaries are standalone executables compiled with [Bun](https://bun.sh)
+(`bun build --compile`). The release workflow cross-compiles all three from a
+single Linux runner on a `v*` tag: `ch-macos-arm64`, `ch-macos-x64`, and
+`ch-linux`.
 
-To build one locally (from the cli app directory), e.g. the macOS ARM binary:
+To build one locally (requires `bun`; from the cli app directory after
+`yarn build`), e.g. the macOS ARM binary:
 
 ```
-yarn build-pkg -t node18-macos-arm64 -o ch-macos-arm64
+yarn build-binary --target=bun-darwin-arm64 --outfile ch-macos-arm64
 ```
 
 ## Getting Hashes for the Homebrew Tap

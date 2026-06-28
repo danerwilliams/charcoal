@@ -33,6 +33,24 @@ jobs:
       - name: Test
         run: yarn workspace @danerwilliams/charcoal run test-ci
 
+  binary:
+    name: 'Build binary (smoke test)'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+      - uses: oven-sh/setup-bun@v2
+      - name: Install
+        run: yarn install --immutable
+      - name: Build
+        run: yarn turbo run build
+      - name: Compile and smoke test the binary
+        working-directory: apps/cli
+        run: |
+          bun build --compile ./dist/src/index.js --outfile ch
+          ./ch --version
+          ./ch fish | head -1
+
   superlinter:
     name: 'Run superlinter'
     runs-on: ubuntu-latest

@@ -20,18 +20,6 @@
     "tmp": "^0.2.1",
     "yargs": "^17.5.1"
   },
-  "pkg": {
-    "scripts": "dist/src/**/*.js",
-    "assets": [
-      "dist/src/commands/**/*",
-      "dist/src/lib/ch.fish"
-    ],
-    "targets": [
-      "node18-macos",
-      "node18-linux"
-    ],
-    "outputPath": "pkg"
-  },
   "publishConfig": {
     "access": "public"
   },
@@ -40,8 +28,8 @@
     "postinstall": "node scripts/node_version.js || node dist/scripts/node_version.js",
     "lint": "eslint src --quiet --ext .ts --cache",
     "check": "tsc --noEmit",
-    "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js && cp src/lib/ch.fish dist/src/lib/ch.fish",
-    "build-pkg": "pkg dist/src/index.js -c package.json --public-packages \"*\"",
+    "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js",
+    "build-binary": "bun build --compile ./dist/src/index.js",
     "dev": "./scripts/installation/develop.sh",
     "cli": "node ./dist/src/index.js",
     "test": "tsc && yarn mocha \"dist/test/**/*.test.js\"  --parallel --jobs 8",
@@ -83,7 +71,6 @@
     "nock": "^13.2.6",
     "nyc": "^15.1.0",
     "pinst": "^3.0.0",
-    "pkg": "^5.8.1",
     "prettier": "^2.8.3",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
