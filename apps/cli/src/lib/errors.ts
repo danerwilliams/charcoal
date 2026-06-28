@@ -58,7 +58,7 @@ export class UntrackedBranchError extends Error {
           branchName
         )}.`,
         `You can track it by specifying its parent with ${chalk.cyan(
-          `gt branch track`
+          `ch branch track`
         )}.`,
       ].join('\n')
     );
@@ -86,7 +86,7 @@ export class BlockedDuringRebaseError extends Error {
       [
         `This operation is blocked during a rebase.`,
         `You may still use git directly, and continue with ${chalk.cyan(
-          'gt continue'
+          'ch continue'
         )}.`,
       ].join('\n')
     );

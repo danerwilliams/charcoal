@@ -144,7 +144,7 @@ async function graphiteHelper(
       context.engine.rebaseInProgress()
     ) {
       throw new DetachedError(
-        `Did you mean to run ${chalk.cyan(`gt continue`)}?`
+        `Did you mean to run ${chalk.cyan(`ch continue`)}?`
       );
     }
     throw err;
@@ -165,7 +165,7 @@ async function graphiteHelper(
 function handleGraphiteError(err: any, context: TContextLite): void {
   switch (err.constructor) {
     case CommandKilledError:
-    case KilledError: // the user doesn't need a message if they ended gt
+    case KilledError: // the user doesn't need a message if they ended ch
     case RebaseConflictError: // we've already logged a message
       // pass
       return;

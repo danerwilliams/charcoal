@@ -36,7 +36,7 @@ for (const scene of [new BasicScene()]) {
     });
 
     it('Sanity check - can unset pager', () => {
-      process.env.TEST_GT_PAGER = 'less';
+      process.env.TEST_CH_PAGER = 'less';
       expect(
         scene.repo.runCliCommandAndGetOutput([`user`, `pager`, `--unset`])
       ).to.equal(

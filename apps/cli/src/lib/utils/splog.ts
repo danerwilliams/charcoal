@@ -41,7 +41,7 @@ export function composeSplog(
               [
                 '',
                 `${chalk.bold('tip')}: ${s}`,
-                chalk.italic('Feeling expert? `gt user tips --disable`'),
+                chalk.italic('Feeling expert? `ch user tips --disable`'),
                 '',
               ].join('\n')
             )
@@ -69,7 +69,7 @@ export function composeSplog(
               `NOTE: Tried to send output to your pager (${chalk.cyan(
                 opts.pager
               )}) but encountered an error.\nYou can change your configured pager or disable paging: ${chalk.cyan(
-                `gt user pager --help`
+                `ch user pager --help`
               )}`
             )
           );

@@ -43,8 +43,19 @@ export abstract class AbstractScene {
   public cleanup(): void {
     process.chdir(this.oldDir);
     if (!process.env.DEBUG) {
-      fs.emptyDirSync(this.dir);
-      this.tmpDir.removeCallback();
+      // Best-effort temp cleanup. Retry to ride out the ENOTEMPTY/EBUSY race
+      // when a lingering git/background process still holds files in the dir,
+      // and swallow any residual error so teardown never fails the suite.
+      try {
+        fs.rmSync(this.dir, {
+          recursive: true,
+          force: true,
+          maxRetries: 5,
+          retryDelay: 100,
+        });
+      } catch {
+        // ignore — the OS will reclaim the temp dir
+      }
     }
   }
 

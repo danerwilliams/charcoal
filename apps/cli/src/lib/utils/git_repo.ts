@@ -5,7 +5,7 @@ import { USER_CONFIG_OVERRIDE_ENV } from '../context';
 
 const TEXT_FILE_NAME = 'test.txt';
 
-// This class should only be used by tests and `gt demo`
+// This class should only be used by tests and `ch demo`
 export class GitRepo {
   dir: string;
   userConfigPath: string;

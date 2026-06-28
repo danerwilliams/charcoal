@@ -39,7 +39,7 @@ async function validateNoMergedOrClosedBranches(
 
   const hasMultipleBranches = mergedOrClosedBranches.length > 1;
   context.splog.tip(
-    'You can use `gt repo sync` to find and delete all merged/closed branches automatically and rebase their children.'
+    'You can use `ch repo sync` to find and delete all merged/closed branches automatically and rebase their children.'
   );
 
   context.splog.warn(
@@ -106,7 +106,7 @@ function validateBaseRevisions(branchNames: string[], context: TContext): void {
             `You are trying to submit at least one branch that has not been restacked on its parent.`,
             `To resolve this, check out ${chalk.yellow(
               branchName
-            )} and run ${chalk.cyan(`gt upstack restack`)}.`,
+            )} and run ${chalk.cyan(`ch upstack restack`)}.`,
           ].join('\n')
         );
       }
@@ -116,7 +116,7 @@ function validateBaseRevisions(branchNames: string[], context: TContext): void {
           [
             `You are trying to submit at least one branch whose base does not match its parent remotely, without including its parent.`,
             `You may want to use ${chalk.cyan(
-              `gt stack submit`
+              `ch stack submit`
             )} to ensure that the ancestors of ${chalk.yellow(
               branchName
             )} are included in your submission.`,

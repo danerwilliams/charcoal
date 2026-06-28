@@ -24,7 +24,7 @@
     "scripts": "dist/src/**/*.js",
     "assets": [
       "dist/src/commands/**/*",
-      "dist/src/lib/gt.fish"
+      "dist/src/lib/ch.fish"
     ],
     "targets": [
       "node18-macos",
@@ -40,7 +40,7 @@
     "postinstall": "node scripts/node_version.js || node dist/scripts/node_version.js",
     "lint": "eslint src --quiet --ext .ts --cache",
     "check": "tsc --noEmit",
-    "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js && cp src/lib/gt.fish dist/src/lib/gt.fish",
+    "build": "rm -rf dist/ && yarn lint && tsc && cp scripts/node_version.js dist/scripts/node_version.js && cp src/lib/ch.fish dist/src/lib/ch.fish",
     "build-pkg": "pkg dist/src/index.js -c package.json --public-packages \"*\"",
     "dev": "./scripts/installation/develop.sh",
     "cli": "node ./dist/src/index.js",
@@ -56,8 +56,8 @@
     "dist"
   ],
   "bin": {
-    "graphite": "dist/src/index.js",
-    "gt": "dist/src/index.js"
+    "ch": "dist/src/index.js",
+    "charcoal": "dist/src/index.js"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",
