@@ -10,16 +10,16 @@ for (const scene of allScenes) {
 
     it('Can abort a restack with a merge conflict', () => {
       scene.repo.createChange('a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChangeAndAmend('1');
 
       expect(() =>
-        scene.repo.runCliCommand(['stack', 'restack', '-q'])
+        scene.repo.runCliCommand(['restack', '-q'])
       ).to.throw();
       expect(scene.repo.rebaseInProgress()).to.be.true;
 
@@ -35,16 +35,16 @@ for (const scene of allScenes) {
 
     it('Can continue a stack restack with single merge conflict', () => {
       scene.repo.createChange('a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChangeAndAmend('1');
 
       expect(() =>
-        scene.repo.runCliCommand(['stack', 'restack', '-q'])
+        scene.repo.runCliCommand(['restack', '-q'])
       ).to.throw();
       expect(scene.repo.rebaseInProgress()).to.be.true;
 
@@ -65,13 +65,13 @@ for (const scene of allScenes) {
 
     it('Can run continue multiple times on a stack restack with multiple merge conflicts', () => {
       scene.repo.createChange('a');
-      scene.repo.runCliCommand([`branch`, `create`, `a`, `-m`, `a`]);
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
 
       scene.repo.createChange('b');
-      scene.repo.runCliCommand([`branch`, `create`, `b`, `-m`, `b`]);
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
 
       scene.repo.createChange('c');
-      scene.repo.runCliCommand([`branch`, `create`, `c`, `-m`, `c`]);
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
 
       scene.repo.checkoutBranch('a');
       scene.repo.createChangeAndAmend('a1');
@@ -82,7 +82,7 @@ for (const scene of allScenes) {
       scene.repo.checkoutBranch('a');
 
       expect(() =>
-        scene.repo.runCliCommand(['stack', 'restack', '-q'])
+        scene.repo.runCliCommand(['restack', '-q'])
       ).to.throw();
       expect(scene.repo.rebaseInProgress()).to.be.true;
 

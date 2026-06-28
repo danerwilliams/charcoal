@@ -41,7 +41,7 @@ function printBranchInfo(branchName: string, context: TContext) {
     context.splog.info(
       `This branch has fallen behind ${chalk.blueBright(
         context.engine.getParentPrecondition(branchName)
-      )} - you may want to ${chalk.cyan(`ch upstack restack`)}.`
+      )} - you may want to ${chalk.cyan(`ch restack --upstack`)}.`
     );
   } else {
     const nearestAncestorNeedingRestack = context.engine
@@ -55,7 +55,7 @@ function printBranchInfo(branchName: string, context: TContext) {
           nearestAncestorNeedingRestack
         )} has fallen behind ${chalk.blueBright(
           context.engine.getParentPrecondition(nearestAncestorNeedingRestack)
-        )} - you may want to ${chalk.cyan(`ch stack restack`)}.`
+        )} - you may want to ${chalk.cyan(`ch restack`)}.`
       );
     }
   }

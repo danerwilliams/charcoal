@@ -97,8 +97,8 @@ async function branchOnboardingFlow(context: TContext) {
   context.splog.tip(
     [
       "If you have an existing branch or stack that you'd like to start working on with Charcoal, you can begin tracking it now!",
-      'To add other non-Charcoal branches to Charcoal later, check out `ch branch track`.',
-      'If you only want to use Charcoal for new branches, feel free to exit now and use `ch branch create`.',
+      'To add other non-Charcoal branches to Charcoal later, check out `ch track`.',
+      'If you only want to use Charcoal for new branches, feel free to exit now and use `ch create`.',
     ].join('\n')
   );
   if (

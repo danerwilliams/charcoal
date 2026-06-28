@@ -58,7 +58,7 @@ export class UntrackedBranchError extends Error {
           branchName
         )}.`,
         `You can track it by specifying its parent with ${chalk.cyan(
-          `ch branch track`
+          `ch track`
         )}.`,
       ].join('\n')
     );

@@ -61,7 +61,7 @@ export async function createBranchAction(
     context.splog.tip(
       [
         'To insert a created branch into the middle of your stack, use the `--insert` flag.',
-        "If you meant to insert this branch, you can rearrange your stack's dependencies with `ch upstack onto`",
+        "If you meant to insert this branch, you can rearrange your stack's dependencies with `ch move`",
       ].join('\n')
     );
     return;

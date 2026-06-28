@@ -11,17 +11,11 @@ for (const scene of allScenes) {
       const branchName = 'a';
 
       scene.repo.createChangeAndCommit('2', '2');
-      scene.repo.runCliCommand([
-        `branch`,
-        `create`,
-        branchName,
-        `-m`,
-        branchName,
-      ]);
+      scene.repo.runCliCommand([`create`, branchName, `-m`, branchName]);
       expect(scene.repo.currentBranchName()).to.equal(branchName);
 
       scene.repo.checkoutBranch('main');
-      scene.repo.runCliCommand([`branch`, `delete`, branchName, `-f`]);
+      scene.repo.runCliCommand([`delete`, branchName, `-f`]);
       expectBranches(scene.repo, 'main');
     });
   });
