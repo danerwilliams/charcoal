@@ -4,6 +4,7 @@
 import chalk from 'chalk';
 import tmp from 'tmp';
 import yargs, { CommandModule } from 'yargs';
+import { version } from '../package.json';
 import { globalArgumentsOptions } from './lib/global_arguments';
 import { getYargsInput } from './lib/pre-yargs/preprocess_command';
 import { registerCommands } from './lib/register_commands';
@@ -109,6 +110,9 @@ const cli = registerCompletion(
 
 void cli
   .help()
+  // Pin to the bundled version; yargs' default resolves package.json relative
+  // to the cwd, which is wrong in the single-file binary / outside apps/cli.
+  .version(version)
   .usage(
     'Charcoal is a command line tool that makes working with stacked changes fast & intuitive.\n\nhttps://docs.graphite.dev/guides/graphite-cli'
   )
