@@ -202,20 +202,18 @@ export function updatePrBodyFooter(
   const escapedTitleText = titleText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const escapedFooterText = footerText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  // Match a pattern where there's the main body content, followed by the footer section
-  // The footer section starts with the title text and ends with the footer text
-  const matchExistingFooter = new RegExp(
-    `(?<body>[\\s\\S]*)(?<footer>${escapedTitleText}[\\s\\S]*?${escapedFooterText})$`,
-    's'
+  // Strip every existing footer block (and the blank lines before it), wherever
+  // it sits in the body — not just at the very end. Anchoring to end-of-body
+  // meant that if a bot appended content after the footer, we couldn't find the
+  // old footer and appended a second one (duplicate). Removing all of them and
+  // re-appending a single footer keeps exactly one, and preserves any other
+  // content (e.g. bot sections) that followed it.
+  const footerBlock = new RegExp(
+    `\\s*${escapedTitleText}[\\s\\S]*?${escapedFooterText}`,
+    'g'
   );
 
-  const match = matchExistingFooter.exec(body);
-
-  if (match?.groups?.body) {
-    return match.groups.body + footer;
-  }
-
-  return body + footer;
+  return body.replace(footerBlock, '').trimEnd() + footer;
 }
 
 async function selectBranches(

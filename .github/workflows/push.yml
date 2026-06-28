@@ -11,21 +11,23 @@ jobs:
   lint_and_fast_tests:
     name: "Run CLI tests"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x, 15.x, 16.x, 17.x, 18.x, current]
     steps:
       # Basic setup
       - uses: actions/checkout@v3
         with:
           clean: "false"
           fetch-depth: 0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      # Binaries ship via Bun (no node runtime dependency for users), so we test
+      # on a single supported Node version rather than a stale 14->current matrix
+      # (the latter broke: mocha's bundled yargs fails under the newest Node, and
+      # Node 14-17 are EOL).
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
       - name: Install
         run: yarn install --immutable
+      - name: Lint
+        run: yarn workspace @danerwilliams/charcoal run lint
       - name: Build
         run: yarn turbo run build
       - name: Setup git
