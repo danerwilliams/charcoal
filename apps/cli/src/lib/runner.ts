@@ -5,7 +5,6 @@ import yargs from 'yargs';
 import chalk from 'chalk';
 import { version } from '../../package.json';
 import { init } from '../actions/init';
-import { refreshPRInfoInBackground } from '../background_tasks/fetch_pr_info';
 import {
   initContext,
   initContextLite,
@@ -124,8 +123,6 @@ async function graphiteHelper(
   const cacheBefore = context.engine.debug;
 
   try {
-    refreshPRInfoInBackground(context);
-
     if (
       canonicalName !== 'repo init' &&
       !context.repoConfig.graphiteInitialized()
