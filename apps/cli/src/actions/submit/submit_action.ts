@@ -140,14 +140,27 @@ export async function submitAction(
     chalk.blueBright('\n🌳 Updating dependency trees in PR bodies...')
   );
 
+  // Submitting changes the dependency tree of the submitted branches *and*
+  // their ancestors, so refresh footers for both (#85).
+  const branchesToUpdate = new Set<string>(branchNames);
   for (const branch of branchNames) {
-    const prInfo = context.engine.getPrInfo(branch);
-    const footer = createPrBodyFooter(context, branch);
+    let ancestor = context.engine.getParent(branch);
+    while (ancestor && !context.engine.isTrunk(ancestor)) {
+      branchesToUpdate.add(ancestor);
+      ancestor = context.engine.getParent(ancestor);
+    }
+  }
 
-    if (!prInfo) {
-      throw new Error(`PR info is undefined for branch ${branch}`);
+  for (const branch of branchesToUpdate) {
+    const prInfo = context.engine.getPrInfo(branch);
+
+    // A branch with no open PR (e.g. an unsubmitted leaf under --update-only)
+    // has no body to update; skip it rather than `gh pr edit undefined` (#109).
+    if (!prInfo?.number) {
+      continue;
     }
 
+    const footer = createPrBodyFooter(context, branch);
     const prFooterChanged = !prInfo.body?.includes(footer);
 
     if (prFooterChanged) {
@@ -160,9 +173,7 @@ export async function submitAction(
       ]);
 
       context.splog.info(
-        `${chalk.green(branch)}: ${prInfo.url} (${
-          prFooterChanged ? chalk.yellow('Updated') : 'No-op'
-        })`
+        `${chalk.green(branch)}: ${prInfo.url} (${chalk.yellow('Updated')})`
       );
     }
   }
