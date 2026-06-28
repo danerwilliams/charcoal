@@ -1,0 +1,19 @@
+e2e4.txt
+  s_6912db1f8d2431::t_07ed05a4b2400f 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "e965cf1c4e0838823c52453d19b293767b51f2b9",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}

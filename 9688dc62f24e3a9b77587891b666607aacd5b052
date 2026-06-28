@@ -1,0 +1,22 @@
+e2e1.txt
+  s_6912db1f8d2431::t_fecc08f5bf1545 1
+e2e2.txt
+  s_6912db1f8d2431::t_2a30bf055575f3 1
+  s_6912db1f8d2431::t_81c6600d3dc3ba 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "9688dc62f24e3a9b77587891b666607aacd5b052",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
