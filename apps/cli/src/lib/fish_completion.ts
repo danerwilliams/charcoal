@@ -1,4 +1,5 @@
-### Installation: ch fish >> ~/.config/fish/completions/ch.fish
+// Inlined so it survives single-file binary compilation (no runtime file read).
+export const FISH_COMPLETION = String.raw`### Installation: ch fish >> ~/.config/fish/completions/ch.fish
 # git helpers adapted from fish git completion
 function __fish_git_local_branches
     command git for-each-ref --format='%(refname:strip=2)' refs/heads/ 2>/dev/null
@@ -29,3 +30,4 @@ complete -c ch -x -n "__fish_seen_subcommand_from checkout co delete dl track tr
 
 # ch get takes remote branches
 complete -c ch -x -n "__fish_seen_subcommand_from get g" -a "(__fish_git_remote_branches)"
+`;
