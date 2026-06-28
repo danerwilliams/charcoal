@@ -58,7 +58,7 @@ export const handler = async (argv: argsT): Promise<void> => {
   });
 };
 
-const getGhVersion = (): string | null => {
+export const getGhVersion = (): string | null => {
   try {
     const output = execFileSync('gh', ['--version']).toString();
     const match = output.match(/gh version (\d+\.\d+\.\d+)/);
@@ -67,6 +67,8 @@ const getGhVersion = (): string | null => {
     return null;
   }
 };
+
+export const isGhInstalled = (): boolean => getGhVersion() !== null;
 
 export const getGithubAuthorizationStatus = (): boolean => {
   try {

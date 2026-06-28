@@ -43,7 +43,10 @@ Graphite is an amazing company and you should absolutely check out their product
 
 However, many organizations aren't interested in paying for Graphite's team plan at this time.
 
-The Graphite CLI does not need to depend on Graphite's API, so this project allows for use of the CLI with any git repository (even ones hosted on platforms other than GitHub!), entirely for free.
+The Graphite CLI does not need to depend on Graphite's API, so this project lets you use it with your own GitHub repositories, entirely for free.
+
+> [!NOTE]
+> Charcoal talks to GitHub through the [GitHub CLI (`gh`)](https://cli.github.com) rather than Graphite's API, so PR features (`submit`, `get`, PR-aware `sync`) require `gh` to be installed and authenticated (`ch auth`) and work with **GitHub** repositories. Local stacking commands work with any git repo. (Earlier versions aspired to support GitLab/Bitbucket; that isn't implemented.)
 
 ## Commands
 

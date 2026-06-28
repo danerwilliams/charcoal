@@ -1,6 +1,7 @@
 import { API_ROUTES } from '@withgraphite/graphite-cli-routes';
 import * as t from '@withgraphite/retype';
 import chalk from 'chalk';
+import { githubRepoSlug } from '../../lib/api/github_repo';
 import { TContext } from '../../lib/context';
 import { ExitFailedError } from '../../lib/errors';
 import { Unpacked } from '../../lib/utils/ts_helpers';
@@ -27,6 +28,7 @@ export async function submitPullRequest(
 ): Promise<void> {
   const pr = await requestServerToSubmitPR({
     submissionInfo,
+    repo: githubRepoSlug(context),
   });
 
   if (pr.response.status === 'error') {
@@ -59,14 +61,17 @@ export async function submitPullRequest(
 
 async function requestServerToSubmitPR({
   submissionInfo,
+  repo,
 }: {
   submissionInfo: TPRSubmissionInfo;
+  repo: string;
 }): Promise<TSubmittedPR> {
   const request = submissionInfo[0];
 
   try {
     const response = await submitPrToGithub({
       request,
+      repo,
     });
 
     return {
@@ -87,8 +92,10 @@ async function requestServerToSubmitPR({
 
 async function submitPrToGithub({
   request,
+  repo,
 }: {
   request: TSubmittedPRRequest;
+  repo: string;
 }): Promise<TSubmittedPRResponse> {
   // prepare_branches always attaches reviewers, but the route type only
   // declares them on the 'create' variant.
@@ -99,6 +106,8 @@ async function submitPrToGithub({
         'pr',
         'view',
         request.head,
+        '--repo',
+        repo,
         '--json',
         'headRefName,url,number,baseRefName,body',
       ]).toString()
@@ -118,7 +127,14 @@ async function submitPrToGithub({
     ];
 
     if (editArgs.length) {
-      execFileSync('gh', ['pr', 'edit', prInfo.headRefName, ...editArgs]);
+      execFileSync('gh', [
+        'pr',
+        'edit',
+        prInfo.headRefName,
+        '--repo',
+        repo,
+        ...editArgs,
+      ]);
     }
 
     return {
@@ -135,6 +151,8 @@ async function submitPrToGithub({
       const result = execFileSync('gh', [
         'pr',
         'create',
+        '--repo',
+        repo,
         '--head',
         request.head,
         '--base',
