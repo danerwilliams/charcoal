@@ -1,0 +1,49 @@
+apps/cli/src/commands/auth.ts
+  s_6912db1f8d2431::t_c7e8f4f32913cd 61,71
+  s_6912db1f8d2431::t_e7726ad03d8fcb 72
+README.md
+  s_6912db1f8d2431::t_1eb4c516d69456 46-49
+apps/cli/src/actions/submit/submit_action.ts
+  s_6912db1f8d2431::t_1a1cb0a6dd4345 2
+  s_6912db1f8d2431::t_a60e6ec52cb86b 146
+  s_6912db1f8d2431::t_f703dbfead7fcd 173-174
+apps/cli/src/lib/api/github_repo.ts
+  s_6912db1f8d2431::t_a2bd01441de608 1-8
+apps/cli/src/actions/sync/get.ts
+  s_6912db1f8d2431::t_9feff92a37d8ed 3
+  s_6912db1f8d2431::t_5f3dbff4ef446d 79-80,84-90,100-101,103
+  s_6912db1f8d2431::t_49b3aa6bd88741 19,30
+  s_6912db1f8d2431::t_6f6cec400417e5 53
+apps/cli/src/actions/submit/prepare_branches.ts
+  s_6912db1f8d2431::t_f33a9031ec5e7c 10-13
+  s_6912db1f8d2431::t_5fe7ec20efd6ca 337-343
+  s_6912db1f8d2431::t_025e36dff6788a 344
+apps/cli/src/actions/submit/submit_prs.ts
+  s_6912db1f8d2431::t_1b791c88b1fd4a 31
+  s_6912db1f8d2431::t_ad0d660b463c46 130-137
+  s_6912db1f8d2431::t_c3123f34730d44 4
+  s_6912db1f8d2431::t_dc61e3fb383511 95,98,109-110
+  s_6912db1f8d2431::t_6466967c2e436f 154-155
+  s_6912db1f8d2431::t_37ae909a04b2c6 64,67,74
+apps/cli/src/actions/sync_pr_info.ts
+  s_6912db1f8d2431::t_3791dc15497fb3 2
+  s_6912db1f8d2431::t_0fa5932c90550a 20-21
+apps/cli/src/lib/api/pr_info.ts
+  s_6912db1f8d2431::t_44bfd5ee1a538c 4-8,20-21,38-42,44-53,62,64-75,78-84,86-89,91-92,94-97,99-100,102-103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "7c4b776314d4a4c3715089fb615190cca1c8e40b",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
