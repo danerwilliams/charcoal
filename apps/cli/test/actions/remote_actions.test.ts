@@ -106,6 +106,12 @@ for (const scene of [new CloneScene()]) {
       );
     });
 
-    // TODO test downstack get actions
+    it('get errors clearly when a branch cannot be traced to trunk', () => {
+      // The test harness has no GitHub PRs, so PR-based stack resolution fails
+      // gracefully (rather than silently no-op'ing like the old stub).
+      expect(() =>
+        scene.repo.runCliCommand([`get`, `nonexistent`])
+      ).to.throw();
+    });
   });
 }
