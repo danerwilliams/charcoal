@@ -1,0 +1,19 @@
+ft.txt
+  s_a9185dcb106c62::t_46e75234a03731 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "a7fc0bfabbdd93dfe73aee580edf46354d7b9a2b",
+  "prompts": {},
+  "sessions": {
+    "s_a9185dcb106c62": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "13fa8542-8b53-41b1-9ee5-11218682fde3",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
