@@ -8,6 +8,18 @@
 
 `brew install danerwilliams/tap/charcoal`
 
+Homebrew works on both macOS and Linux. Without Homebrew (e.g. on Linux), grab the
+binary for your platform from the [latest release](https://github.com/danerwilliams/charcoal/releases/latest)
+and put it on your `PATH`:
+
+```sh
+# Linux x64 example
+curl -L -o ch https://github.com/danerwilliams/charcoal/releases/latest/download/ch-linux
+chmod +x ch && sudo mv ch /usr/local/bin/
+```
+
+(macOS binaries are `ch-macos-arm64` and `ch-macos-x64`.)
+
 The command is `ch`:
 
 ```sh
