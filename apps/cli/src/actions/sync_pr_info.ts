@@ -1,4 +1,5 @@
 import { getPrInfoForBranches, TPRInfoToUpsert } from '../lib/api/pr_info';
+import { githubRepoSlug } from '../lib/api/github_repo';
 import { TContext } from '../lib/context';
 import { TEngine } from '../lib/engine/engine';
 
@@ -16,7 +17,8 @@ export async function syncPrInfo(
     branchNames.map((branchName) => ({
       branchName,
       prNumber: context.engine.getPrInfo(branchName)?.number,
-    }))
+    })),
+    githubRepoSlug(context)
   );
 
   upsertPrInfoForBranches(upsertInfo, context.engine);

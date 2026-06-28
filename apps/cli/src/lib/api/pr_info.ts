@@ -1,7 +1,11 @@
 import { API_ROUTES } from '@withgraphite/graphite-cli-routes';
 
 import t from '@withgraphite/retype';
-import { execFileSync } from 'child_process';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+import { ExitFailedError } from '../errors';
+
+const execFileAsync = promisify(execFile);
 
 type TBranchNameWithPrNumber = {
   branchName: string;
@@ -13,7 +17,8 @@ export type TPRInfoToUpsert = t.UnwrapSchemaMap<
 >['prs'];
 
 export async function getPrInfoForBranches(
-  branchNamesWithExistingPrInfo: TBranchNameWithPrNumber[]
+  branchNamesWithExistingPrInfo: TBranchNameWithPrNumber[],
+  repo: string
 ): Promise<TPRInfoToUpsert> {
   // We sync branches without existing PR info by name.  For branches
   // that are already associated with a PR, we only sync if both the
@@ -30,21 +35,22 @@ export async function getPrInfoForBranches(
     }
   });
 
-  try {
-    const response: TPRInfoToUpsert = [];
-
-    // Gh CLI allows for looking up by pr number of branch name
-    for (const prId of [...existingPrInfo.keys(), ...branchesWithoutPrInfo]) {
+  // gh can look up by PR number or branch name. These lookups are independent,
+  // so run them concurrently rather than one blocking subprocess at a time.
+  const prIds = [...existingPrInfo.keys(), ...branchesWithoutPrInfo];
+  const results = await Promise.all(
+    prIds.map(async (prId) => {
       try {
-        const pr = await JSON.parse(
-          execFileSync('gh', [
-            'pr',
-            'view',
-            `${prId}`,
-            '--json',
-            'state,url,title,body,number,headRefName,baseRefName,reviewDecision,isDraft',
-          ]).toString()
-        );
+        const { stdout } = await execFileAsync('gh', [
+          'pr',
+          'view',
+          `${prId}`,
+          '--repo',
+          repo,
+          '--json',
+          'state,url,title,body,number,headRefName,baseRefName,reviewDecision,isDraft',
+        ]);
+        const pr = JSON.parse(stdout);
 
         pr.prNumber = pr.number;
         delete pr.number;
@@ -53,35 +59,46 @@ export async function getPrInfoForBranches(
           pr.reviewDecision = undefined;
         }
 
-        response.push(pr);
+        return pr;
       } catch (error) {
-        if (
-          error instanceof Error &&
-          error.message.includes('no pull requests found')
-        ) {
-          continue;
+        const detail =
+          error instanceof Error
+            ? `${error.message}\n${
+                (error as Error & { stderr?: string }).stderr ?? ''
+              }`
+            : String(error);
+
+        // A branch simply having no PR is expected; anything else (gh missing,
+        // auth expired, rate limit, network) is a real failure we must surface
+        // rather than silently treating it as "no PR info".
+        if (/no .*pull requests found/i.test(detail)) {
+          return undefined;
         }
 
-        throw error;
+        throw new ExitFailedError(
+          [
+            `Failed to fetch pull request info from GitHub (via \`gh\`) for "${prId}".`,
+            `Ensure the GitHub CLI is installed and authenticated (run \`ch auth\`).`,
+            detail.trim(),
+          ].join('\n')
+        );
       }
-    }
+    })
+  );
 
-    return response.filter((pr) => {
-      const branchNameIfAssociated = existingPrInfo.get(pr.prNumber);
+  const response: TPRInfoToUpsert = results.filter((pr) => pr !== undefined);
 
-      const shouldAssociatePrWithBranch =
-        !branchNameIfAssociated &&
-        pr.state === 'OPEN' &&
-        branchesWithoutPrInfo.has(pr.headRefName);
+  return response.filter((pr) => {
+    const branchNameIfAssociated = existingPrInfo.get(pr.prNumber);
 
-      const shouldUpdateExistingBranch =
-        branchNameIfAssociated === pr.headRefName;
+    const shouldAssociatePrWithBranch =
+      !branchNameIfAssociated &&
+      pr.state === 'OPEN' &&
+      branchesWithoutPrInfo.has(pr.headRefName);
 
-      return shouldAssociatePrWithBranch || shouldUpdateExistingBranch;
-    });
-  } catch {
-    // Not really sure why this pattern was accepted but when this used the
-    // Graphite API they'd just return an empty array if the request failed.
-    return [];
-  }
+    const shouldUpdateExistingBranch =
+      branchNameIfAssociated === pr.headRefName;
+
+    return shouldAssociatePrWithBranch || shouldUpdateExistingBranch;
+  });
 }

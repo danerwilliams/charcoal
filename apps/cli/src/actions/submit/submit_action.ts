@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { githubRepoSlug } from '../../lib/api/github_repo';
 import { TContext } from '../../lib/context';
 import { TScopeSpec } from '../../lib/engine/scope_spec';
 import { ExitFailedError, KilledError } from '../../lib/errors';
@@ -142,6 +143,7 @@ export async function submitAction(
 
   // Submitting changes the dependency tree of the submitted branches *and*
   // their ancestors, so refresh footers for both (#85).
+  const repo = githubRepoSlug(context);
   const branchesToUpdate = new Set<string>(branchNames);
   for (const branch of branchNames) {
     let ancestor = context.engine.getParent(branch);
@@ -168,6 +170,8 @@ export async function submitAction(
         'pr',
         'edit',
         `${prInfo.number}`,
+        '--repo',
+        repo,
         '--body',
         updatePrBodyFooter(prInfo.body, footer),
       ]);

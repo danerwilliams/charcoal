@@ -7,7 +7,10 @@ import { getPRTitle } from './pr_title';
 import { getReviewers } from './reviewers';
 import { TPRSubmissionInfo } from './submit_prs';
 import { PreconditionsFailedError } from '../../lib/errors';
-import { getGithubAuthorizationStatus } from '../../commands/auth';
+import {
+  getGithubAuthorizationStatus,
+  isGhInstalled,
+} from '../../commands/auth';
 
 type TPRSubmissionAction = { branchName: string } & (
   | { update: false }
@@ -328,10 +331,16 @@ async function getReviewersMaybeInteractively(
 }
 
 function cliAuthPrecondition(context: TContext): boolean {
-  const isGhAuthorized = getGithubAuthorizationStatus();
-
   const isGithubIntegrationEnabled =
     context.repoConfig.getIsGithubIntegrationEnabled();
+
+  if (isGithubIntegrationEnabled && !isGhInstalled()) {
+    throw new PreconditionsFailedError(
+      `The GitHub CLI (\`gh\`) is required but was not found on your PATH. Install it from https://cli.github.com and run \`ch auth\`. To use Charcoal without GitHub integration, run \`ch repo github --no-enable\`.`
+    );
+  }
+
+  const isGhAuthorized = getGithubAuthorizationStatus();
 
   if (isGithubIntegrationEnabled && !isGhAuthorized) {
     throw new PreconditionsFailedError(

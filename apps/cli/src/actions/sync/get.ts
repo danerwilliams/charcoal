@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { execFileSync } from 'child_process';
+import { githubRepoSlug } from '../../lib/api/github_repo';
 import { TContext } from '../../lib/context';
 import {
   ExitFailedError,
@@ -15,6 +16,7 @@ export async function getAction(
   context: TContext
 ): Promise<void> {
   const trunk = context.engine.trunk;
+  const repo = githubRepoSlug(context);
 
   let target = args.branchName ?? context.engine.currentBranch;
   if (!target) {
@@ -25,7 +27,7 @@ export async function getAction(
 
   // A numeric argument is a PR number; resolve it to its head branch.
   if (/^\d+$/.test(target)) {
-    target = prFieldOrThrow(target, 'headRefName');
+    target = prFieldOrThrow(target, 'headRefName', repo);
   }
 
   if (target === trunk) {
@@ -48,7 +50,7 @@ export async function getAction(
     }
     seen.add(branch);
     downstack.unshift(branch);
-    branch = prFieldMaybe(branch, 'baseRefName');
+    branch = prFieldMaybe(branch, 'baseRefName', repo);
   }
 
   if (branch !== trunk) {
@@ -74,13 +76,18 @@ export async function getAction(
 
 function prFieldMaybe(
   branchOrNumber: string,
-  field: 'headRefName' | 'baseRefName'
+  field: 'headRefName' | 'baseRefName',
+  repo: string
 ): string | undefined {
   try {
     const pr = JSON.parse(
-      execFileSync('gh', ['pr', 'view', branchOrNumber, '--json', field], {
-        stdio: ['ignore', 'pipe', 'ignore'],
-      }).toString()
+      execFileSync(
+        'gh',
+        ['pr', 'view', branchOrNumber, '--repo', repo, '--json', field],
+        {
+          stdio: ['ignore', 'pipe', 'ignore'],
+        }
+      ).toString()
     );
     return pr[field] || undefined;
   } catch {
@@ -90,9 +97,10 @@ function prFieldMaybe(
 
 function prFieldOrThrow(
   branchOrNumber: string,
-  field: 'headRefName' | 'baseRefName'
+  field: 'headRefName' | 'baseRefName',
+  repo: string
 ): string {
-  const value = prFieldMaybe(branchOrNumber, field);
+  const value = prFieldMaybe(branchOrNumber, field, repo);
   if (!value) {
     throw new ExitFailedError(
       `Could not find an open pull request for "${branchOrNumber}".`
