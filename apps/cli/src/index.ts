@@ -109,6 +109,10 @@ const cli = registerCompletion(
 );
 
 void cli
+  // Pin the program name; yargs otherwise derives it from the process, which is
+  // the runtime ("bun") in the compiled single-file binary, or "index.js" under
+  // node.
+  .scriptName('ch')
   .help()
   // Pin to the bundled version; yargs' default resolves package.json relative
   // to the cwd, which is wrong in the single-file binary / outside apps/cli.
