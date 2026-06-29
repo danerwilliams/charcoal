@@ -1,0 +1,21 @@
+apps/cli/src/index.ts
+  s_6912db1f8d2431::t_5497a087251606 112-115
+apps/cli/package.json
+  s_6912db1f8d2431::t_1364a7f4903e56 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "bdca8ef2ec0ca4ed0e58d8ca468f7828735bf69d",
+  "prompts": {},
+  "sessions": {
+    "s_6912db1f8d2431": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "359c6ab9-92d1-4e64-8f60-8e20bac80bab",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Dane Williams <dane.williams@clay.com>"
+    }
+  }
+}
