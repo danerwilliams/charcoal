@@ -1,4 +1,5 @@
 import { TContext } from '../lib/context';
+import { SCOPE } from '../lib/engine/scope_spec';
 
 export const footerTitle = '\n\n\n#### PR Dependency Tree\n\n';
 export const footerFooter =
@@ -15,7 +16,42 @@ export function createPrBodyFooter(context: TContext, branch: string): string {
     isForkHead: false,
   });
 
-  return `${footerTitle}${tree}${footerFooter}`;
+  return `${footerTitle}${buildMergedAncestors(
+    context,
+    branch
+  )}${tree}${footerFooter}`;
+}
+
+/**
+ * Renders PR references for ancestors that merged and were removed from the
+ * stack. Numbers are unioned across every branch in the live stack — not just
+ * the bottom — so the history survives reordering, wherever it is stored.
+ */
+function buildMergedAncestors(context: TContext, prBranch: string): string {
+  const liveStack = context.engine
+    .getRelativeStack(prBranch, SCOPE.STACK)
+    .filter((branch) => !context.engine.isTrunk(branch));
+
+  const liveNumbers = new Set(
+    liveStack
+      .map((branch) => context.engine.getPrInfo(branch)?.number)
+      .filter((number): number is number => number !== undefined)
+  );
+
+  const mergedNumbers = new Set<number>();
+  for (const branch of liveStack) {
+    for (const number of context.engine.getPrInfo(branch)
+      ?.mergedStackAncestors ?? []) {
+      if (!liveNumbers.has(number)) {
+        mergedNumbers.add(number);
+      }
+    }
+  }
+
+  return [...mergedNumbers]
+    .sort((a, b) => a - b)
+    .map((number) => `\n* ~~**PR #${number}**~~ (merged)`)
+    .join('');
 }
 
 /**
