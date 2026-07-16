@@ -1,12 +1,18 @@
 import chalk from 'chalk';
 import { TContext } from '../lib/context';
 import { SCOPE } from '../lib/engine/scope_spec';
+import { preserveMergedAncestors } from './merged_ancestors';
 import { restackBranches } from './restack';
 
 export function foldCurrentBranch(keep: boolean, context: TContext): void {
   const currentBranchName = context.engine.currentBranchPrecondition;
   const parentBranchName =
     context.engine.getParentPrecondition(currentBranchName);
+  preserveMergedAncestors(
+    [keep ? currentBranchName : parentBranchName],
+    [keep ? parentBranchName : currentBranchName],
+    context
+  );
   context.engine.foldCurrentBranch(keep);
   if (keep) {
     context.splog.info(

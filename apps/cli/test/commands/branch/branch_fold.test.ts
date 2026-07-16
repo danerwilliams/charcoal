@@ -3,6 +3,10 @@ import { allScenes } from '../../lib/scenes/all_scenes';
 import { configureTest } from '../../lib/utils/configure_test';
 import { expectBranches } from '../../lib/utils/expect_branches';
 import { expectCommits } from '../../lib/utils/expect_commits';
+import {
+  readMetadataRef,
+  writeMetadataRef,
+} from '../../../src/lib/engine/metadata_ref';
 
 for (const scene of allScenes) {
   describe(`(${scene}): fold`, function () {
@@ -75,6 +79,58 @@ for (const scene of allScenes) {
 
       scene.repo.checkoutBranch('d');
       expectCommits(scene.repo, 'd, b, a, 1');
+    });
+
+    it('forwards merged history to the survivor (keep=false)', () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+
+      writeMetadataRef(
+        'b',
+        {
+          ...readMetadataRef('b', scene.dir),
+          prInfo: {
+            ...readMetadataRef('b', scene.dir).prInfo,
+            mergedStackAncestors: [98],
+          },
+        },
+        scene.dir
+      );
+
+      scene.repo.runCliCommand([`fold`]); // b absorbed into a; a survives
+
+      expect(
+        readMetadataRef('a', scene.dir).prInfo?.mergedStackAncestors
+      ).to.deep.equal([98]);
+    });
+
+    it('forwards merged history to the survivor (keep=true)', () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+
+      // Parent a carries the merged ancestor; folding with --keep keeps b,
+      // which must inherit a's history.
+      writeMetadataRef(
+        'a',
+        {
+          ...readMetadataRef('a', scene.dir),
+          prInfo: {
+            ...readMetadataRef('a', scene.dir).prInfo,
+            mergedStackAncestors: [98],
+          },
+        },
+        scene.dir
+      );
+
+      scene.repo.runCliCommand([`fold`, `--keep`]); // a absorbed into b; b survives
+
+      expect(
+        readMetadataRef('b', scene.dir).prInfo?.mergedStackAncestors
+      ).to.deep.equal([98]);
     });
   });
 }
