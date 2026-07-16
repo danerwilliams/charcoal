@@ -813,7 +813,14 @@ export function composeEngine({
           parentBranchName: lastBranch.name,
           parentBranchRevision: lastBranch.revision,
           children: [],
-          prInfo: branchName === branchToSplit ? cachedMeta.prInfo : undefined,
+          prInfo:
+            branchName === branchToSplit
+              ? cachedMeta.prInfo
+              : idx === 0
+              ? {
+                  mergedStackAncestors: cachedMeta.prInfo?.mergedStackAncestors,
+                }
+              : undefined,
         });
         lastBranch.name = branchName;
         lastBranch.revision = branchRevision;
