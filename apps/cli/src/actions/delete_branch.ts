@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { TContext } from '../lib/context';
 import { SCOPE } from '../lib/engine/scope_spec';
 import { ExitFailedError } from '../lib/errors';
+import { preserveMergedAncestors } from './merged_ancestors';
 import { restackBranches } from './restack';
 
 export function deleteBranchAction(
@@ -27,6 +28,11 @@ export function deleteBranchAction(
   const branchesToRestack = context.engine.getRelativeStack(
     args.branchName,
     SCOPE.UPSTACK_EXCLUSIVE
+  );
+  preserveMergedAncestors(
+    context.engine.getChildren(args.branchName),
+    [args.branchName],
+    context
   );
   context.engine.deleteBranch(args.branchName);
   context.splog.info(`Deleted branch ${chalk.red(args.branchName)}`);
