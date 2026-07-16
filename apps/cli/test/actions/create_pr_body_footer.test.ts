@@ -202,4 +202,13 @@ describe('createPrBodyFooter', () => {
 
     expect(tree).to.equal(['* **PR #100** 👈', '* **PR #101**'].join('\n'));
   });
+
+  it('excludes a merged number that is still a live PR number in the stack', () => {
+    // main -> b -> c, PR on b, b's merged history collides with c's live #101
+    const context = fakeContext({ b: TRUNK, c: 'b' }, { b: [101] });
+
+    const tree = treeOf(createPrBodyFooter(context, 'b'));
+
+    expect(tree).to.equal(['* **PR #100** 👈', '* **PR #101**'].join('\n'));
+  });
 });
