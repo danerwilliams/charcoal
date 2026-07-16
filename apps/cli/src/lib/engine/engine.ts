@@ -606,7 +606,7 @@ export function composeEngine({
       }
       updateMeta(branchName, {
         ...meta,
-        prInfo: {},
+        prInfo: { mergedStackAncestors: meta.prInfo?.mergedStackAncestors },
       });
     },
     getChildren,
@@ -650,7 +650,12 @@ export function composeEngine({
         assertBranchIsValidAndNotTrunkAndGetMeta(currentBranchName);
 
       git.moveBranch(branchName);
-      updateMeta(branchName, { ...cachedMeta, prInfo: {} });
+      updateMeta(branchName, {
+        ...cachedMeta,
+        prInfo: {
+          mergedStackAncestors: cachedMeta.prInfo?.mergedStackAncestors,
+        },
+      });
 
       cachedMeta.children.forEach((childBranchName) =>
         setParent(childBranchName, branchName)
@@ -808,7 +813,14 @@ export function composeEngine({
           parentBranchName: lastBranch.name,
           parentBranchRevision: lastBranch.revision,
           children: [],
-          prInfo: branchName === branchToSplit ? cachedMeta.prInfo : undefined,
+          prInfo:
+            branchName === branchToSplit
+              ? cachedMeta.prInfo
+              : idx === 0
+              ? {
+                  mergedStackAncestors: cachedMeta.prInfo?.mergedStackAncestors,
+                }
+              : undefined,
         });
         lastBranch.name = branchName;
         lastBranch.revision = branchRevision;

@@ -1,6 +1,7 @@
 import { default as chalk } from 'chalk';
 import { TContext } from '../../lib/context';
 import { deleteBranchAction, isSafeToDelete } from '../delete_branch';
+import { preserveMergedAncestors } from '../merged_ancestors';
 
 /**
  * This method is assumed to be idempotent -- if a merge conflict interrupts
@@ -87,16 +88,25 @@ export async function cleanBranches(
       // We know this branch isn't being deleted.
       // If its parent IS being deleted, we have to change its parent.
 
-      // First, find the nearest ancestor that isn't being deleted.
+      // First, find the nearest ancestor that isn't being deleted, recording
+      // the deleted branches we skip so we can preserve any that merged.
       const parentBranchName = context.engine.getParentPrecondition(branchName);
       let newParentBranchName = parentBranchName;
+      const removedChain: string[] = [];
       while (newParentBranchName in branchesToDelete) {
+        removedChain.push(newParentBranchName);
         newParentBranchName =
           context.engine.getParentPrecondition(newParentBranchName);
       }
 
       // If the nearest ancestor is not already the parent, we make it so.
       if (newParentBranchName !== parentBranchName) {
+        // removedChain is child->trunk; preserve trunk-side first.
+        preserveMergedAncestors(
+          [branchName],
+          [...removedChain].reverse(),
+          context
+        );
         context.engine.setParent(branchName, newParentBranchName);
         context.splog.info(
           `Set parent of ${chalk.cyan(branchName)} to ${chalk.blueBright(

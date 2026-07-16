@@ -23,6 +23,7 @@ export const prInfoSchema = t.shape({
     ])
   ),
   isDraft: t.optional(t.boolean),
+  mergedStackAncestors: t.optional(t.array(t.number)),
 });
 export type TBranchPRInfo = t.TypeOf<typeof prInfoSchema>;
 

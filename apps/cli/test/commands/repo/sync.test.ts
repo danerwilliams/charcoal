@@ -166,5 +166,125 @@ for (const scene of allScenes) {
       expect(metadata.includes('b')).to.be.false;
       expect(metadata.includes('c')).to.be.true;
     });
+
+    it('preserves a merged ancestor PR number on the reparented child', async () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+
+      writeMetadataRef(
+        'a',
+        {
+          ...readMetadataRef('a', scene.dir),
+          prInfo: { number: 100, state: 'MERGED' },
+        },
+        scene.dir
+      );
+
+      scene.repo.runCliCommand([`repo`, `owner`]);
+      scene.repo.runCliCommand([`repo`, `sync`, `-f`, `--no-pull`]);
+
+      expectBranches(scene.repo, 'b, main');
+      expect(
+        readMetadataRef('b', scene.dir).prInfo?.mergedStackAncestors
+      ).to.deep.equal([100]);
+    });
+
+    it('does not preserve a closed (unmerged) ancestor', async () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+
+      writeMetadataRef(
+        'a',
+        {
+          ...readMetadataRef('a', scene.dir),
+          prInfo: { number: 100, state: 'CLOSED' },
+        },
+        scene.dir
+      );
+
+      scene.repo.runCliCommand([`repo`, `owner`]);
+      scene.repo.runCliCommand([`repo`, `sync`, `-f`, `--no-pull`]);
+
+      expectBranches(scene.repo, 'b, main');
+      expect(readMetadataRef('b', scene.dir).prInfo?.mergedStackAncestors).to
+        .be.undefined;
+    });
+
+    it('captures both branches when two merge in one sync', async () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+      scene.repo.createChange('4', 'c');
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
+
+      writeMetadataRef(
+        'a',
+        {
+          ...readMetadataRef('a', scene.dir),
+          prInfo: { number: 100, state: 'MERGED' },
+        },
+        scene.dir
+      );
+      writeMetadataRef(
+        'b',
+        {
+          ...readMetadataRef('b', scene.dir),
+          prInfo: { number: 101, state: 'MERGED' },
+        },
+        scene.dir
+      );
+
+      scene.repo.runCliCommand([`repo`, `owner`]);
+      scene.repo.runCliCommand([`repo`, `sync`, `-f`, `--no-pull`]);
+
+      expectBranches(scene.repo, 'c, main');
+      expect(
+        readMetadataRef('c', scene.dir).prInfo?.mergedStackAncestors
+      ).to.deep.equal([100, 101]);
+    });
+
+    it('chains merged ancestors across successive syncs', async () => {
+      scene.repo.createChange('2', 'a');
+      scene.repo.runCliCommand([`create`, `a`, `-m`, `a`]);
+      scene.repo.createChange('3', 'b');
+      scene.repo.runCliCommand([`create`, `b`, `-m`, `b`]);
+      scene.repo.createChange('4', 'c');
+      scene.repo.runCliCommand([`create`, `c`, `-m`, `c`]);
+
+      writeMetadataRef(
+        'a',
+        {
+          ...readMetadataRef('a', scene.dir),
+          prInfo: { number: 100, state: 'MERGED' },
+        },
+        scene.dir
+      );
+      scene.repo.runCliCommand([`repo`, `owner`]);
+      scene.repo.runCliCommand([`repo`, `sync`, `-f`, `--no-pull`]);
+
+      writeMetadataRef(
+        'b',
+        {
+          ...readMetadataRef('b', scene.dir),
+          prInfo: {
+            ...readMetadataRef('b', scene.dir).prInfo,
+            number: 101,
+            state: 'MERGED',
+          },
+        },
+        scene.dir
+      );
+      scene.repo.runCliCommand([`repo`, `sync`, `-f`, `--no-pull`]);
+
+      expectBranches(scene.repo, 'c, main');
+      expect(
+        readMetadataRef('c', scene.dir).prInfo?.mergedStackAncestors
+      ).to.deep.equal([100, 101]);
+    });
   });
 }
