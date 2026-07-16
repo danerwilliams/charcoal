@@ -606,7 +606,7 @@ export function composeEngine({
       }
       updateMeta(branchName, {
         ...meta,
-        prInfo: {},
+        prInfo: { mergedStackAncestors: meta.prInfo?.mergedStackAncestors },
       });
     },
     getChildren,
@@ -650,7 +650,12 @@ export function composeEngine({
         assertBranchIsValidAndNotTrunkAndGetMeta(currentBranchName);
 
       git.moveBranch(branchName);
-      updateMeta(branchName, { ...cachedMeta, prInfo: {} });
+      updateMeta(branchName, {
+        ...cachedMeta,
+        prInfo: {
+          mergedStackAncestors: cachedMeta.prInfo?.mergedStackAncestors,
+        },
+      });
 
       cachedMeta.children.forEach((childBranchName) =>
         setParent(childBranchName, branchName)
