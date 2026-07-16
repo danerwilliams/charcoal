@@ -9,65 +9,62 @@ export function createPrBodyFooter(context: TContext, branch: string): string {
 
   const tree = buildBranchTree({
     context,
-    currentBranches: [terminalParent],
+    branch: terminalParent,
     prBranch: branch,
-    currentDepth: 0,
+    depth: 0,
+    isForkHead: false,
   });
 
   return `${footerTitle}${tree}${footerFooter}`;
 }
 
+/**
+ * Renders the stack as a markdown list. A stack is linear, so a plain stack is
+ * a flat list. Indentation only encodes a genuine fork (a branch with 2+
+ * children on the PR's line): each child of the fork is indented one level as a
+ * sub-branch head, and that head's own linear sub-stack is indented one level
+ * deeper (and kept flat), so the sub-branches remain visually distinct.
+ */
 function buildBranchTree({
   context,
-  currentBranches,
+  branch,
   prBranch,
-  currentDepth,
+  depth,
+  isForkHead,
 }: {
   context: TContext;
-  currentBranches: string[];
+  branch: string;
   prBranch: string;
-  currentDepth: number;
+  depth: number;
+  isForkHead: boolean;
 }): string {
-  let tree = '';
+  const leaf = buildLeaf({ context, branch, depth, prBranch });
 
-  for (const branch of currentBranches) {
-    if (
-      branch !== prBranch &&
-      !(
-        // If we aren't on the last branch,
-        // then we should print it if the pr branch is either a parent or child
-        // of the current branch being looked at in our recursive algorithm
-        (
-          isParentOfBranch(context, branch, prBranch) ||
-          isParentOfBranch(context, prBranch, branch)
-        )
-      )
-    ) {
-      continue;
-    }
+  const children = context.engine
+    .getChildren(branch)
+    .filter((child) => isOnPrLine(context, child, prBranch));
 
-    const leaf = buildLeaf({
-      context,
-      branch,
-      depth: currentDepth,
-      prBranch,
-    });
-
-    tree += leaf || '';
-
-    const children = context.engine.getChildren(branch);
-
-    if (children.length) {
-      tree += `${buildBranchTree({
-        context,
-        currentBranches: children,
-        prBranch,
-        currentDepth: currentDepth + 1,
-      })}`;
-    }
+  if (children.length === 0) {
+    return leaf;
   }
 
-  return tree;
+  // A fork opens a nested level for its sub-branch heads; a linear step keeps
+  // the current level, except the first step off a fork head, which indents the
+  // head's sub-stack once so it reads as belonging to that head.
+  const isFork = children.length > 1;
+  const childDepth = isFork || isForkHead ? depth + 1 : depth;
+
+  const childTrees = children.map((child) =>
+    buildBranchTree({
+      context,
+      branch: child,
+      prBranch,
+      depth: childDepth,
+      isForkHead: isFork,
+    })
+  );
+
+  return `${leaf}${childTrees.join('')}`;
 }
 
 function buildLeaf({
@@ -80,13 +77,11 @@ function buildLeaf({
   branch: string;
   depth: number;
   prBranch: string;
-}): string | undefined {
-  const prInfo = context.engine.getPrInfo(branch);
-
-  const number = prInfo?.number;
+}): string {
+  const number = context.engine.getPrInfo(branch)?.number;
 
   if (!number) {
-    return;
+    return '';
   }
 
   return `\n${'  '.repeat(depth)}* **PR #${number}**${
@@ -105,6 +100,19 @@ function findTerminalParent(context: TContext, currentBranch: string): string {
   }
 
   return findTerminalParent(context, parent);
+}
+
+/** True if `branch` is the PR branch, or an ancestor or descendant of it. */
+function isOnPrLine(
+  context: TContext,
+  branch: string,
+  prBranch: string
+): boolean {
+  return (
+    branch === prBranch ||
+    isParentOfBranch(context, branch, prBranch) ||
+    isParentOfBranch(context, prBranch, branch)
+  );
 }
 
 function isParentOfBranch(
