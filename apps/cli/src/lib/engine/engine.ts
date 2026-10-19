@@ -25,7 +25,6 @@ import {
 } from './metadata_ref';
 import { validateOrFixParentBranchRevision } from './parse_branches_and_meta';
 import { TScopeSpec } from './scope_spec';
-import fjsh from 'fast-json-stable-hash';
 
 export type TEngine = {
   debug: string;
@@ -170,10 +169,21 @@ export function composeEngine({
 }): TEngine {
   const cacheLoader = composeCacheLoader(splog);
   void cacheLoader;
-  const originallyLoadedBranches = cacheLoader.loadCachedBranches(trunkName);
+  // Serialized copy of the branches in the persisted cache file, or undefined
+  // if the file is stale. Branch metadata is mutated in place, so we snapshot
+  // it rather than keeping a reference.
+  let persistedBranchesSnapshot: string | undefined;
+  const loadBranches = () => {
+    const { branches, isFromPersistedCache } =
+      cacheLoader.loadCachedBranches(trunkName);
+    persistedBranchesSnapshot = isFromPersistedCache
+      ? JSON.stringify(branches)
+      : undefined;
+    return branches;
+  };
   const cache = {
     currentBranch: currentBranchOverride ?? git.getCurrentBranchName(),
-    branches: originallyLoadedBranches,
+    branches: loadBranches(),
   };
 
   const assertTrunk = () => {
@@ -430,10 +440,7 @@ export function composeEngine({
       return cuteString(cache);
     },
     persist() {
-      if (
-        fjsh.hash(originallyLoadedBranches, 'sha256') !==
-        fjsh.hash(cache.branches, 'sha256')
-      ) {
+      if (JSON.stringify(cache.branches) !== persistedBranchesSnapshot) {
         cacheLoader.persistCache(trunkName, cache.branches);
       }
     },
@@ -445,11 +452,11 @@ export function composeEngine({
       Object.keys(getMetadataRefList()).forEach((branchName) =>
         deleteMetadataRef(branchName)
       );
-      cache.branches = cacheLoader.loadCachedBranches(trunkName);
+      cache.branches = loadBranches();
     },
     rebuild(newTrunkName?: string) {
       trunkName = newTrunkName ?? trunkName;
-      cache.branches = cacheLoader.loadCachedBranches(trunkName);
+      cache.branches = loadBranches();
     },
     get trunk() {
       return assertTrunk();

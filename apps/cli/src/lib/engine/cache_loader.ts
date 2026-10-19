@@ -9,9 +9,10 @@ import { getMetadataRefList } from './metadata_ref';
 import { parseBranchesAndMeta, TCacheSeed } from './parse_branches_and_meta';
 
 type TCacheLoader = {
-  loadCachedBranches(
-    trunkName: string | undefined
-  ): Record<string, Readonly<TCachedMeta>>;
+  loadCachedBranches(trunkName: string | undefined): {
+    branches: Record<string, Readonly<TCachedMeta>>;
+    isFromPersistedCache: boolean;
+  };
   persistCache(
     trunkName: string | undefined,
     cachedBranches: Record<string, TCachedMeta>
@@ -25,17 +26,16 @@ export function composeCacheLoader(splog: TSplog): TCacheLoader {
       splog.debug('Reading cache seed data...');
       const cacheSeed = getCacheSeed(trunkName);
       splog.debug('Loading cache...');
-      return (
-        (persistedCache.data.sha === hashSeed(cacheSeed) &&
-          Object.fromEntries(persistedCache.data.branches)) ||
-        parseBranchesAndMeta(
-          {
-            ...cacheSeed,
-            trunkName,
-          },
-          splog
-        )
-      );
+      if (persistedCache.data.sha === hashSeed(cacheSeed)) {
+        return {
+          branches: Object.fromEntries(persistedCache.data.branches),
+          isFromPersistedCache: true,
+        };
+      }
+      return {
+        branches: parseBranchesAndMeta({ ...cacheSeed, trunkName }, splog),
+        isFromPersistedCache: false,
+      };
     },
     persistCache: (
       trunkName: string | undefined,
